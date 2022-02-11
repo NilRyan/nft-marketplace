@@ -1,7 +1,7 @@
 import { CommentEntity } from 'src/comments/entities/comment.entity';
+import { BaseEntity } from 'src/common/entities/base.entity';
 import { UserEntity } from 'src/users/entities/user.entity';
 import {
-  BaseEntity,
   Column,
   Entity,
   ManyToOne,

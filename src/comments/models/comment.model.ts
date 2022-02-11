@@ -10,13 +10,13 @@ export class Comment {
   @Field()
   comment: string;
 
-  @Field()
+  @Field((type) => User)
   user: User;
 
   @Field()
   userId: string;
 
-  @Field()
+  @Field((type) => Nft)
   nft: Nft;
 
   @Field()

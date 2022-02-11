@@ -1,0 +1,82 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Comment {
+  id: String!
+  comment: String!
+  user: User!
+  userId: String!
+  nft: Nft!
+  nftId: String!
+}
+
+type Nft {
+  id: String!
+  imageUrl: String!
+  title: String!
+  description: String!
+  price: String!
+  category: String
+  owner: User!
+  ownerId: String!
+  comments: [Comment!]
+}
+
+type User {
+  id: String!
+  username: String!
+  aboutMe: String!
+  firstName: String!
+  lastName: String!
+  balance: String!
+  nfts: [Nft!]!
+}
+
+type Query {
+  users: [User!]!
+  user(id: Int!): User!
+  comments: [Comment!]!
+  comment(id: Int!): Comment!
+  nft(id: Int!): Nft!
+}
+
+type Mutation {
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: Int!): User!
+  createComment(createCommentInput: CreateCommentInput!): Comment!
+  updateComment(updateCommentInput: UpdateCommentInput!): Comment!
+  removeComment(id: Int!): Comment!
+  createNft(createNftInput: CreateNftInput!): Nft!
+  updateNft(updateNftInput: UpdateNftInput!): Nft!
+  removeNft(id: Int!): Nft!
+}
+
+input UpdateUserInput {
+  username: String
+  firstName: String
+  lastName: String
+  id: Int!
+}
+
+input CreateCommentInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateCommentInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateNftInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateNftInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}

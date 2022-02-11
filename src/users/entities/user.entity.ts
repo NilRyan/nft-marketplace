@@ -1,9 +1,10 @@
 import { Exclude } from 'class-transformer';
+import { BaseEntity } from 'src/common/entities/base.entity';
 import { NftEntity } from 'src/nft/entities/nft.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('users')
-export class UserEntity {
+export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

@@ -1,9 +1,11 @@
+import { CommentRepository } from './comments.repository';
 import { Injectable } from '@nestjs/common';
 import { CreateCommentInput } from './dto/create-comment.input';
 import { UpdateCommentInput } from './dto/update-comment.input';
 
 @Injectable()
 export class CommentsService {
+  constructor(private readonly commentRepository: CommentRepository) {}
   create(createCommentInput: CreateCommentInput) {
     return 'This action adds a new comment';
   }

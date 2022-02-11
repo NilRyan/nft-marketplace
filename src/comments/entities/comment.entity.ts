@@ -1,4 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { BaseEntity } from 'src/common/entities/base.entity';
 import { NftEntity } from 'src/nft/entities/nft.entity';
 import { UserEntity } from 'src/users/entities/user.entity';
 import {
@@ -10,7 +11,7 @@ import {
 } from 'typeorm';
 
 @Entity('comments')
-export class CommentEntity {
+export class CommentEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

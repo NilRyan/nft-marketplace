@@ -10,7 +10,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 /* TODO: 
     1. Add PostgreSQL and TypeORM // done
-    2. Setup domain and model entities
+    2. Setup domain and model entities // initial done
     3. Setup basic crud
       - add currency js for monetary values (floating point arithmetic issues)
     4. Add error handling and validation

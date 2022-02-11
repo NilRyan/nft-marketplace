@@ -1,34 +1,34 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { NftService } from './nft.service';
-import { NftEntity } from './entities/nft.entity';
 import { CreateNftInput } from './dto/create-nft.input';
 import { UpdateNftInput } from './dto/update-nft.input';
+import { Nft } from './models/nft.model';
 
-@Resolver(() => NftEntity)
+@Resolver(() => Nft)
 export class NftResolver {
   constructor(private readonly nftService: NftService) {}
 
-  @Mutation(() => NftEntity)
+  @Mutation(() => Nft)
   createNft(@Args('createNftInput') createNftInput: CreateNftInput) {
     return this.nftService.create(createNftInput);
   }
 
-  @Query(() => [NftEntity], { name: 'nft' })
+  @Query(() => [Nft], { name: 'nft' })
   findAll() {
     return this.nftService.findAll();
   }
 
-  @Query(() => NftEntity, { name: 'nft' })
+  @Query(() => Nft, { name: 'nft' })
   findOne(@Args('id', { type: () => Int }) id: number) {
     return this.nftService.findOne(id);
   }
 
-  @Mutation(() => NftEntity)
+  @Mutation(() => Nft)
   updateNft(@Args('updateNftInput') updateNftInput: UpdateNftInput) {
     return this.nftService.update(updateNftInput.id, updateNftInput);
   }
 
-  @Mutation(() => NftEntity)
+  @Mutation(() => Nft)
   removeNft(@Args('id', { type: () => Int }) id: number) {
     return this.nftService.remove(id);
   }

@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { CreateNftInput } from './dto/create-nft.input';
 import { UpdateNftInput } from './dto/update-nft.input';
+import { NftRepository } from './nft.repository';
 
 @Injectable()
 export class NftService {
+  constructor(private readonly nftRepository: NftRepository) {}
   create(createNftInput: CreateNftInput) {
     return 'This action adds a new nft';
   }
