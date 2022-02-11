@@ -12,7 +12,9 @@ import { join } from 'path/posix';
     1. Add PostgreSQL and TypeORM // done
     2. Setup domain and model entities
     3. Setup basic crud
+      - add currency js for monetary values (floating point arithmetic issues)
     4. Add error handling and validation
+    5. Enable searching filtering and pagination
 
   
     5. Add authentication with JWT passport

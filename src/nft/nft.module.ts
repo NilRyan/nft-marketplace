@@ -3,6 +3,6 @@ import { NftService } from './nft.service';
 import { NftResolver } from './nft.resolver';
 
 @Module({
-  providers: [NftResolver, NftService]
+  providers: [NftResolver, NftService],
 })
 export class NftModule {}
