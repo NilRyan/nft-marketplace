@@ -28,6 +28,8 @@
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/typeorm": "^8.0.3",
     "apollo-server-express": "^3.6.3",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.13.2",
     "graphql": "^15.8.0",
     "graphql-tools": "^8.2.0",
     "joi": "^17.6.0",

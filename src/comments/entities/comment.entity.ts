@@ -1,15 +1,31 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { NftEntity } from 'src/nft/entities/nft.entity';
+import { UserEntity } from 'src/users/entities/user.entity';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  RelationId,
+} from 'typeorm';
 
-@ObjectType()
 @Entity()
-export class Comment {
-  @Field()
+export class CommentEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Field()
   @Column()
   comment: string;
-  
+
+  @ManyToOne((type) => UserEntity)
+  user: UserEntity;
+
+  @RelationId((comment: CommentEntity) => comment.user)
+  userId: string;
+
+  @ManyToOne((type) => NftEntity, (nft) => nft.comments)
+  nft: NftEntity;
+
+  @RelationId((comment: CommentEntity) => comment.nft)
+  nftId: string;
 }

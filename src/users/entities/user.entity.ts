@@ -1,33 +1,31 @@
-import { ObjectType, Field } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Exclude } from 'class-transformer';
+import { NftEntity } from 'src/nft/entities/nft.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-@ObjectType()
 @Entity()
-export class User {
-  @Field()
+export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Field()
   @Column()
   username: string;
 
   @Column()
+  @Exclude()
   password: string;
 
-  @Field({ nullable: true })
   @Column({ nullable: true })
   aboutMe: string;
 
-  @Field()
   @Column()
   firstName: string;
 
-  @Field()
   @Column()
   lastName: string;
 
-  @Field()
   @Column({ type: 'bigint' })
   balance: string;
+
+  @OneToMany(() => NftEntity, (nft) => nft.owner)
+  nfts?: NftEntity[];
 }
