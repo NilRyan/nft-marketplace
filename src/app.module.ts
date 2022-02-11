@@ -4,9 +4,9 @@ import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './users/users.module';
 import { CommentsModule } from './comments/comments.module';
 import { NftModule } from './nft/nft.module';
-import Joi from 'joi';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path/posix';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 /* TODO: 
     1. Add PostgreSQL and TypeORM // done
@@ -26,7 +26,8 @@ import { join } from 'path/posix';
 */
 @Module({
   imports: [
-    GraphQLModule.forRootAsync({
+    GraphQLModule.forRootAsync<ApolloDriverConfig>({
+      driver: ApolloDriver,
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
@@ -35,14 +36,7 @@ import { join } from 'path/posix';
       }),
     }),
     ConfigModule.forRoot({
-      validationSchema: Joi.object({
-        POSTGRES_HOST: Joi.string().required(),
-        POSTGRES_PORT: Joi.number().required(),
-        POSTGRES_USER: Joi.string().required(),
-        POSTGRES_PASSWORD: Joi.string().required(),
-        POSTGRES_DB: Joi.string().required(),
-        PORT: Joi.number(),
-      }),
+      envFilePath: ['.env.development', '.env.production'],
     }),
     DatabaseModule,
     UsersModule,

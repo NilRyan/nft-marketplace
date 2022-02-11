@@ -19,8 +19,8 @@ export class Nft {
   @Field()
   price: string;
 
-  @Field()
-  category: string;
+  @Field({ nullable: true })
+  category?: string;
 
   @Field((type) => User)
   owner: User;
@@ -28,6 +28,6 @@ export class Nft {
   @Field()
   ownerId: string;
 
-  @Field((type) => [Comment])
-  comments: Comment[];
+  @Field((type) => [Comment], { nullable: true })
+  comments?: Comment[];
 }

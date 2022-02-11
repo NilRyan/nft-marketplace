@@ -9,7 +9,7 @@ import {
   RelationId,
 } from 'typeorm';
 
-@Entity()
+@Entity('comments')
 export class CommentEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;

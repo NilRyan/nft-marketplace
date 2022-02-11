@@ -1,5 +1,5 @@
-import { Comment } from 'src/comments/entities/comment.entity';
-import { User } from 'src/users/entities/user.entity';
+import { CommentEntity } from 'src/comments/entities/comment.entity';
+import { UserEntity } from 'src/users/entities/user.entity';
 import {
   BaseEntity,
   Column,
@@ -27,18 +27,20 @@ export class NftEntity extends BaseEntity {
   @Column({ type: 'bigint' })
   price: string;
 
-  @Column()
+  @Column({ default: false })
   isDeleted: boolean;
 
-  @Column()
-  category: string;
+  @Column({ nullable: true })
+  category?: string;
 
-  @ManyToOne((type) => User, (user) => user.nfts)
-  owner: User;
+  @ManyToOne((type) => UserEntity, (user) => user.nfts)
+  owner: UserEntity;
 
   @RelationId((nft: NftEntity) => nft.owner)
   ownerId: string;
 
-  @OneToMany(() => Comment, (comment: Comment) => comment.nft)
-  comments: Comment[];
+  @OneToMany(() => CommentEntity, (comment: CommentEntity) => comment.nft, {
+    nullable: true,
+  })
+  comments?: CommentEntity[];
 }

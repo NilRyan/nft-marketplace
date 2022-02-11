@@ -2,7 +2,7 @@ import { Exclude } from 'class-transformer';
 import { NftEntity } from 'src/nft/entities/nft.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity('users')
 export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
