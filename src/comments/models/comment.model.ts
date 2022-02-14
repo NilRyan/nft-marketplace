@@ -1,4 +1,5 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { UserProfileOutput } from 'src/users/dto/user-profile.output';
+import { DateScalarMode, Field, ObjectType } from '@nestjs/graphql';
 import { Nft } from 'src/nft/models/nft.model';
 import { User } from 'src/users/models/user.model';
 
@@ -10,15 +11,21 @@ export class Comment {
   @Field()
   comment: string;
 
-  @Field((type) => User)
-  user: User;
+  @Field((type) => UserProfileOutput)
+  author: UserProfileOutput;
 
   @Field()
-  userId: string;
+  authorId: string;
 
   @Field((type) => Nft)
   nft: Nft;
 
   @Field()
   nftId: string;
+
+  @Field()
+  createdAt: string;
+
+  @Field()
+  updatedAt: string;
 }

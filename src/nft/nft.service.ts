@@ -34,7 +34,8 @@ export class NftService {
     return nft;
   }
 
-  async updateNft(id: string, updateNftInput: UpdateNftInput) {
+  async updateNft(updateNftInput: UpdateNftInput) {
+    const { id } = updateNftInput;
     await this.nftRepository.update(id, updateNftInput);
     const updatedPost = await this.nftRepository.findOne(id, {
       relations: ['owner', 'comments'],

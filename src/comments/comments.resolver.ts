@@ -12,31 +12,24 @@ export class CommentsResolver {
   createComment(
     @Args('createCommentInput') createCommentInput: CreateCommentInput,
   ) {
-    return this.commentsService.create(createCommentInput);
+    return this.commentsService.createComment(createCommentInput);
   }
 
-  @Query(() => [Comment], { name: 'comments' })
-  findAll() {
-    return this.commentsService.findAll();
-  }
-
-  @Query(() => Comment, { name: 'comment' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.commentsService.findOne(id);
+  @Query(() => [Comment])
+  getCommentsForNft(@Args('nftId', { type: () => String }) nftId: string) {
+    return this.commentsService.getCommentsForNft(nftId);
   }
 
   @Mutation(() => Comment)
   updateComment(
     @Args('updateCommentInput') updateCommentInput: UpdateCommentInput,
   ) {
-    return this.commentsService.update(
-      updateCommentInput.id,
-      updateCommentInput,
-    );
+    return this.commentsService.updateComment(updateCommentInput);
   }
 
-  @Mutation(() => Comment)
-  removeComment(@Args('id', { type: () => Int }) id: number) {
-    return this.commentsService.remove(id);
+  @Mutation(() => String)
+  removeComment(@Args('id', { type: () => String }) id: string) {
+    this.commentsService.removeComment(id);
+    return `Comment with id: ${id} has been removed`;
   }
 }

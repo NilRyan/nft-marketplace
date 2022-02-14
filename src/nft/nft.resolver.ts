@@ -37,7 +37,7 @@ export class NftResolver {
 
   @Mutation(() => Nft)
   updateNft(@Args('updateNftInput') updateNftInput: UpdateNftInput) {
-    return this.nftService.updateNft(updateNftInput.id, updateNftInput);
+    return this.nftService.updateNft(updateNftInput);
   }
 
   @Mutation(() => String)

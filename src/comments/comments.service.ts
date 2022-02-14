@@ -1,28 +1,59 @@
+import { CommentNotFoundException } from './exceptions/comment-not-found.exception';
+import { UsersService } from './../users/users.service';
 import { CommentRepository } from './comments.repository';
 import { Injectable } from '@nestjs/common';
 import { CreateCommentInput } from './dto/create-comment.input';
 import { UpdateCommentInput } from './dto/update-comment.input';
+import { NftService } from 'src/nft/nft.service';
 
 @Injectable()
 export class CommentsService {
-  constructor(private readonly commentRepository: CommentRepository) {}
-  create(createCommentInput: CreateCommentInput) {
-    return 'This action adds a new comment';
+  constructor(
+    private readonly commentRepository: CommentRepository,
+    private readonly usersService: UsersService,
+    private readonly nftService: NftService,
+  ) {}
+
+  async createComment(createCommentInput: CreateCommentInput) {
+    const { authorId, nftId } = createCommentInput;
+    const author = await this.usersService.getUserById(authorId);
+    const nft = await this.nftService.getNftById(nftId);
+    const newComment = this.commentRepository.create({
+      ...createCommentInput,
+      author,
+      nft,
+    });
+    return this.commentRepository.save(newComment);
   }
 
-  findAll() {
-    return `This action returns all comments`;
+  async getCommentsForNft(nftId: string) {
+    return await this.commentRepository.find({
+      where: {
+        nft: {
+          id: nftId,
+        },
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} comment`;
+  async updateComment(updateCommentInput: UpdateCommentInput) {
+    const { id } = updateCommentInput;
+    await this.commentRepository.update(id, updateCommentInput);
+    const updatedComment = await this.commentRepository.findOne(id, {
+      relations: ['author', 'nft'],
+    });
+
+    if (!updatedComment) {
+      throw new CommentNotFoundException(id);
+    }
+
+    return updatedComment;
   }
 
-  update(id: number, updateCommentInput: UpdateCommentInput) {
-    return `This action updates a #${id} comment`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} comment`;
+  async removeComment(id: string) {
+    const deleteResponse = await this.commentRepository.delete(id);
+    if (!deleteResponse.affected) {
+      throw new CommentNotFoundException(id);
+    }
   }
 }
