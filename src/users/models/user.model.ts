@@ -12,7 +12,7 @@ export class User {
   @Field()
   email: string;
 
-  @Field()
+  @Field({ nullable: true })
   aboutMe: string;
 
   @Field()

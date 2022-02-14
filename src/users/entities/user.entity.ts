@@ -27,7 +27,7 @@ export class UserEntity extends BaseEntity {
   @Column()
   lastName: string;
 
-  @Column({ type: 'bigint' })
+  @Column({ type: 'numeric', precision: 15, scale: 6, default: 0 })
   balance: string;
 
   @OneToMany(() => NftEntity, (nft) => nft.owner)

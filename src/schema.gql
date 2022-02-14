@@ -27,11 +27,15 @@ type User {
   id: String!
   username: String!
   email: String!
-  aboutMe: String!
+  aboutMe: String
   firstName: String!
   lastName: String!
   balance: String!
   nfts: [Nft!]!
+}
+
+type AccessTokenOutput {
+  accessToken: String!
 }
 
 type Query {
@@ -40,6 +44,12 @@ type Query {
   comments: [Comment!]!
   comment(id: Int!): Comment!
   nft(id: Int!): Nft!
+  login(loginInput: LoginInput!): AccessTokenOutput!
+}
+
+input LoginInput {
+  username: String!
+  password: String!
 }
 
 type Mutation {
@@ -51,6 +61,7 @@ type Mutation {
   createNft(createNftInput: CreateNftInput!): Nft!
   updateNft(updateNftInput: UpdateNftInput!): Nft!
   removeNft(id: Int!): Nft!
+  register(registerUserInput: RegisterUserInput!): User!
 }
 
 input UpdateUserInput {
@@ -80,4 +91,12 @@ input UpdateNftInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!
+}
+
+input RegisterUserInput {
+  username: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
 }

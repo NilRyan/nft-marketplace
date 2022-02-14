@@ -30,4 +30,8 @@ export class UsersService {
   async remove(id: number) {
     return `This action removes a #${id} user`;
   }
+
+  async getUserByUsername(username: string): Promise<UserEntity> {
+    return await this.userRepository.findOne({ where: { username } });
+  }
 }

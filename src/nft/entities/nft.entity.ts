@@ -24,7 +24,7 @@ export class NftEntity extends BaseEntity {
   @Column()
   description: string;
 
-  @Column({ type: 'bigint' })
+  @Column({ type: 'numeric', precision: 15, scale: 6, default: 0 })
   price: string;
 
   @Column({ default: false })
