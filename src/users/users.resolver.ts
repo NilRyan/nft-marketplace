@@ -15,7 +15,6 @@ export class UsersResolver {
   @UseGuards(GqlAuthGuard)
   @Query(() => [User], { name: 'getAllusers' })
   findAll(@GetUser() user: User) {
-    console.log(user);
     return [
       {
         id: 1,

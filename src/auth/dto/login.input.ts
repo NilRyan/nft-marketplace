@@ -3,8 +3,8 @@ import { Field, InputType } from '@nestjs/graphql';
 @InputType()
 export class LoginInput {
   @Field()
-  username: string;
+  readonly username: string;
 
   @Field()
-  password: string;
+  readonly password: string;
 }
