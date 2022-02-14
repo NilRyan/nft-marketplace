@@ -27,9 +27,11 @@ export class NftService {
   }
 
   async getNftById(id: string) {
-    return await this.nftRepository.findOne(id, {
+    const nft = await this.nftRepository.findOne(id, {
       relations: ['owner', 'comments'],
     });
+    if (!nft) throw new NftNotFoundException(id);
+    return nft;
   }
 
   async updateNft(id: string, updateNftInput: UpdateNftInput) {
@@ -49,6 +51,13 @@ export class NftService {
   async removeNft(id: string) {
     const deleteResponse = await this.nftRepository.softDelete(id);
     if (!deleteResponse.affected) {
+      throw new NftNotFoundException(id);
+    }
+  }
+
+  async restoreDeletedNft(id: string) {
+    const restoreResponse = await this.nftRepository.restore(id);
+    if (!restoreResponse.affected) {
       throw new NftNotFoundException(id);
     }
   }

@@ -2,6 +2,15 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type UserProfileOutput {
+  id: String!
+  username: String!
+  email: String!
+  aboutMe: String
+  firstName: String!
+  lastName: String!
+}
+
 type Comment {
   id: String!
   comment: String!
@@ -18,7 +27,7 @@ type Nft {
   description: String!
   price: String!
   category: String
-  owner: User!
+  owner: UserProfileOutput!
   ownerId: String!
   comments: [Comment!]
 }
@@ -39,8 +48,8 @@ type AccessTokenOutput {
 }
 
 type Query {
-  getAllusers: [User!]!
-  user(id: Int!): User!
+  getAllUsers: [UserProfileOutput!]!
+  getUserProfile(id: String!): UserProfileOutput!
   comments: [Comment!]!
   comment(id: Int!): Comment!
   getAllNfts: [Nft!]!
@@ -54,14 +63,16 @@ input LoginInput {
 }
 
 type Mutation {
-  updateUser(updateUserInput: UpdateUserInput!): User!
-  removeUser(id: Int!): User!
+  updateUser(updateUserInput: UpdateUserInput!): UserProfileOutput!
+  removeUser(id: String!): String!
+  restoreDeletedUser(id: String!): String!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
   removeComment(id: Int!): Comment!
   createNft(createNftInput: CreateNftInput!): Nft!
   updateNft(updateNftInput: UpdateNftInput!): Nft!
   removeNft(id: ID!): String!
+  restoreDeletedNft(id: ID!): String!
   register(registerUserInput: RegisterUserInput!): User!
 }
 
@@ -69,7 +80,9 @@ input UpdateUserInput {
   username: String
   firstName: String
   lastName: String
-  id: Int!
+  email: String
+  password: String
+  id: String!
 }
 
 input CreateCommentInput {

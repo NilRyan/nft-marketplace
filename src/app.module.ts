@@ -14,6 +14,7 @@ import { AuthModule } from './auth/auth.module';
     2. Setup domain and model entities // initial done
     3. Setup basic crud - modfiy BaseEntity to BaseModel // initial done
       - add currency js for monetary values (floating point arithmetic issues)
+      - accountStatus enum "Approved", "Disabled"
     4. Add error handling and validation
     5. Enable searching filtering and pagination
 
@@ -24,6 +25,7 @@ import { AuthModule } from './auth/auth.module';
     8. Add caching? 
     9. DB migrations and seeding -- generate mockdata somewhere
     10. add unit tests 
+    11. GraphQL complexity
 */
 @Module({
   imports: [

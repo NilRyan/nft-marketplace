@@ -1,6 +1,6 @@
+import { UserProfileOutput } from './../../users/dto/user-profile.output';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Comment } from 'src/comments/models/comment.model';
-import { User } from 'src/users/models/user.model';
 
 @ObjectType()
 export class Nft {
@@ -22,8 +22,8 @@ export class Nft {
   @Field({ nullable: true })
   category?: string;
 
-  @Field((type) => User)
-  owner: User;
+  @Field((type) => UserProfileOutput)
+  owner: UserProfileOutput;
 
   @Field()
   ownerId: string;

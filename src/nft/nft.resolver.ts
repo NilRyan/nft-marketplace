@@ -8,7 +8,7 @@ import { UpdateNftInput } from './dto/update-nft.input';
 import { Nft } from './models/nft.model';
 import { GqlAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
 @UseGuards(GqlAuthGuard)
-@Resolver(() => Nft)
+@Resolver((of) => Nft)
 export class NftResolver {
   constructor(private readonly nftService: NftService) {}
 
@@ -46,5 +46,9 @@ export class NftResolver {
     return `Nft with id: ${id} has been removed`;
   }
 
-
+  @Mutation(() => String)
+  restoreDeletedNft(@Args('id', { type: () => ID }) id: string) {
+    this.nftService.restoreDeletedNft(id);
+    return `Nft with id: ${id} has been restored`;
+  }
 }

@@ -1,3 +1,4 @@
+import { UserEntity } from 'src/users/entities/user.entity';
 import { UseGuards } from '@nestjs/common';
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GetUser } from 'src/auth/get-user.decorator';
@@ -5,29 +6,38 @@ import { GqlAuthGuard } from './../auth/guards/graphql-jwt-auth.guard';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './models/user.model';
 import { UsersService } from './users.service';
+import { UserProfileOutput } from './dto/user-profile.output';
 
+@UseGuards(GqlAuthGuard)
 @Resolver(() => User)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
-  @UseGuards(GqlAuthGuard)
-  @Query(() => [User], { name: 'getAllusers' })
-  findAll(@GetUser() user: User) {
+  @Query(() => [UserProfileOutput])
+  getAllUsers() {
     return this.usersService.getAllUsers();
   }
 
-  @Query(() => User, { name: 'user' })
-  findOne(@Args('id', { type: () => Int }) id: string) {
+  @Query(() => UserProfileOutput)
+  getUserProfile(@Args('id', { type: () => String }) id: string) {
     return this.usersService.getUser(id);
   }
 
-  @Mutation(() => User)
+  @Mutation(() => UserProfileOutput)
   updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
-    return this.usersService.update(updateUserInput.id, updateUserInput);
+    return this.usersService.updateUser(updateUserInput.id, updateUserInput);
   }
 
-  @Mutation(() => User)
-  removeUser(@Args('id', { type: () => Int }) id: number) {
-    return this.usersService.remove(id);
+  @Mutation(() => String)
+  removeUser(@Args('id', { type: () => String }) id: string) {
+    this.usersService.removeUser(id);
+    return `User with id: ${id} has been removed`;
+  }
+
+  // TODO: Role Admin only
+  @Mutation(() => String)
+  restoreDeletedUser(@Args('id', { type: () => String }) id: string) {
+    this.usersService.restoreDeletedUser(id);
+    return `User with id: ${id} has been restored`;
   }
 }
