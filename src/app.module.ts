@@ -7,11 +7,12 @@ import { NftModule } from './nft/nft.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path/posix';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { AuthModule } from './auth/auth.module';
 
 /* TODO: 
     1. Add PostgreSQL and TypeORM // done
     2. Setup domain and model entities // initial done
-    3. Setup basic crud
+    3. Setup basic crud - modfiy BaseEntity to BaseModel
       - add currency js for monetary values (floating point arithmetic issues)
     4. Add error handling and validation
     5. Enable searching filtering and pagination
@@ -42,6 +43,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
     UsersModule,
     CommentsModule,
     NftModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

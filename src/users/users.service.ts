@@ -11,19 +11,19 @@ import { UserRepository } from './user.repository';
 export class UsersService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  findAll() {
+  async findAll() {
     return `This action returns all users`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async getUser(id: string): Promise<User> {
+    return await this.userRepository.findOne(id);
   }
 
-  update(id: number, updateUserInput: UpdateUserInput) {
+  async update(id: number, updateUserInput: UpdateUserInput) {
     return `This action updates a #${id} user`;
   }
 
-  remove(id: number) {
+  async remove(id: number) {
     return `This action removes a #${id} user`;
   }
 }
