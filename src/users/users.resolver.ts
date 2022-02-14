@@ -14,8 +14,8 @@ export class UsersResolver {
   }
 
   @Query(() => User, { name: 'user' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.usersService.findOne(id);
+  findOne(@Args('id', { type: () => Int }) id: string) {
+    return this.usersService.getUser(id);
   }
 
   @Mutation(() => User)

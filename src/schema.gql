@@ -26,6 +26,7 @@ type Nft {
 type User {
   id: String!
   username: String!
+  email: String!
   aboutMe: String!
   firstName: String!
   lastName: String!
