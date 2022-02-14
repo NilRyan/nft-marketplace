@@ -15,8 +15,8 @@ export class UsersService {
   async create(registrationData: RegisterUserInput): Promise<UserEntity> {
     return await this.userRepository.save(registrationData);
   }
-  async findAll() {
-    return `This action returns all users`;
+  async getAllUsers() {
+    return await this.userRepository.find();
   }
 
   async getUser(id: string): Promise<UserEntity> {

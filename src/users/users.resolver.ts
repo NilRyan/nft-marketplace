@@ -1,12 +1,10 @@
-import { UserEntity } from 'src/users/entities/user.entity';
+import { UseGuards } from '@nestjs/common';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { GetUser } from 'src/auth/get-user.decorator';
 import { GqlAuthGuard } from './../auth/guards/graphql-jwt-auth.guard';
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { UsersService } from './users.service';
-import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './models/user.model';
-import { UseGuards } from '@nestjs/common';
-import { GetUser } from 'src/auth/get-user.decorator';
+import { UsersService } from './users.service';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -15,15 +13,7 @@ export class UsersResolver {
   @UseGuards(GqlAuthGuard)
   @Query(() => [User], { name: 'getAllusers' })
   findAll(@GetUser() user: User) {
-    return [
-      {
-        id: 1,
-        firstName: 'John',
-        lastName: 'Doe',
-        username: 'johndoe',
-        email: 'hello@gmail.com',
-      },
-    ];
+    return this.usersService.getAllUsers();
   }
 
   @Query(() => User, { name: 'user' })

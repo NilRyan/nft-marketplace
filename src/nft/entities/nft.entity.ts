@@ -25,13 +25,13 @@ export class NftEntity extends BaseEntity {
   description: string;
 
   @Column({ type: 'numeric', precision: 15, scale: 6, default: 0 })
-  price: string;
+  price: number;
 
-  @Column({ default: false })
-  isDeleted: boolean;
+  @Column({ default: null, type: 'timestamptz' })
+  lastSale: Date;
 
-  @Column({ nullable: true })
-  category?: string;
+  @Column()
+  category: string;
 
   @ManyToOne((type) => UserEntity, (user) => user.nfts)
   owner: UserEntity;

@@ -22,7 +22,7 @@ export class User {
   lastName: string;
 
   @Field()
-  balance: string;
+  balance: number;
 
   @Field(() => [Nft])
   nfts?: Nft[];

@@ -1,28 +1,55 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { UserEntity } from 'src/users/entities/user.entity';
 import { CreateNftInput } from './dto/create-nft.input';
 import { UpdateNftInput } from './dto/update-nft.input';
+import { NftEntity } from './entities/nft.entity';
+import { NftNotFoundException } from './exceptions/nft-not-found.exception';
 import { NftRepository } from './nft.repository';
 
 @Injectable()
 export class NftService {
+  private readonly logger = new Logger(NftService.name);
+
   constructor(private readonly nftRepository: NftRepository) {}
-  create(createNftInput: CreateNftInput) {
-    return 'This action adds a new nft';
+  async createNft(createNftInput: CreateNftInput, user: UserEntity) {
+    const newNft = await this.nftRepository.create({
+      ...createNftInput,
+      owner: user,
+    });
+
+    return await this.nftRepository.save(newNft);
   }
 
-  findAll() {
-    return `This action returns all nft`;
+  async getNfts(): Promise<NftEntity[]> {
+    return await this.nftRepository.find({
+      relations: ['owner', 'comments'],
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} nft`;
+  async getNftById(id: string) {
+    return await this.nftRepository.findOne(id, {
+      relations: ['owner', 'comments'],
+    });
   }
 
-  update(id: number, updateNftInput: UpdateNftInput) {
-    return `This action updates a #${id} nft`;
+  async updateNft(id: string, updateNftInput: UpdateNftInput) {
+    await this.nftRepository.update(id, updateNftInput);
+    const updatedPost = await this.nftRepository.findOne(id, {
+      relations: ['owner', 'comments'],
+    });
+
+    if (!updatedPost) {
+      this.logger.warn(`Nft with id: ${id} not found`);
+      throw new NftNotFoundException(id);
+    }
+
+    return updatedPost;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} nft`;
+  async removeNft(id: string) {
+    const deleteResponse = await this.nftRepository.softDelete(id);
+    if (!deleteResponse.affected) {
+      throw new NftNotFoundException(id);
+    }
   }
 }

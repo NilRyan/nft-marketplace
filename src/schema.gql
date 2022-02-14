@@ -30,7 +30,7 @@ type User {
   aboutMe: String
   firstName: String!
   lastName: String!
-  balance: String!
+  balance: Float!
   nfts: [Nft!]!
 }
 
@@ -43,7 +43,8 @@ type Query {
   user(id: Int!): User!
   comments: [Comment!]!
   comment(id: Int!): Comment!
-  nft(id: Int!): Nft!
+  getAllNfts: [Nft!]!
+  getNftById(id: ID!): Nft!
   login(loginInput: LoginInput!): AccessTokenOutput!
 }
 
@@ -60,7 +61,7 @@ type Mutation {
   removeComment(id: Int!): Comment!
   createNft(createNftInput: CreateNftInput!): Nft!
   updateNft(updateNftInput: UpdateNftInput!): Nft!
-  removeNft(id: Int!): Nft!
+  removeNft(id: ID!): String!
   register(registerUserInput: RegisterUserInput!): User!
 }
 
@@ -83,14 +84,20 @@ input UpdateCommentInput {
 }
 
 input CreateNftInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  imageUrl: String!
+  title: String!
+  description: String!
+  category: String!
+  price: Float!
 }
 
 input UpdateNftInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  imageUrl: String
+  title: String
+  description: String
+  category: String
+  price: Float
+  id: String!
 }
 
 input RegisterUserInput {
