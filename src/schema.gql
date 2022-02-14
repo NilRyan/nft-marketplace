@@ -39,7 +39,7 @@ type AccessTokenOutput {
 }
 
 type Query {
-  users: [User!]!
+  getAllusers: [User!]!
   user(id: Int!): User!
   comments: [Comment!]!
   comment(id: Int!): Comment!

@@ -19,7 +19,7 @@ export class UsersService {
     return `This action returns all users`;
   }
 
-  async getUser(id: string): Promise<User> {
+  async getUser(id: string): Promise<UserEntity> {
     return await this.userRepository.findOne(id);
   }
 

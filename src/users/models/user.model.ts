@@ -13,7 +13,7 @@ export class User {
   email: string;
 
   @Field({ nullable: true })
-  aboutMe: string;
+  aboutMe?: string;
 
   @Field()
   firstName: string;
