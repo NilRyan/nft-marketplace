@@ -1,4 +1,8 @@
-import { UseGuards, NotFoundException } from '@nestjs/common';
+import {
+  UseGuards,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { Resolver, Query, Mutation, Args, Int, ID } from '@nestjs/graphql';
@@ -41,18 +45,36 @@ export class NftResolver {
   }
 
   @Mutation(() => Nft)
-  async updateNft(@Args('updateNftInput') updateNftInput: UpdateNftInput) {
+  async updateNft(
+    @Args('updateNftInput') updateNftInput: UpdateNftInput,
+    @GetUser() user: UserEntity,
+  ) {
+    await this.verifyIfUserIsAuthorized(updateNftInput.id, user);
     const updatedPost = await this.nftService.updateNft(updateNftInput);
     if (!updatedPost) throw new NftNotFoundException(updateNftInput.id);
     return updatedPost;
   }
 
   @Mutation(() => String)
-  async removeNft(@Args('id', { type: () => ID }) id: string) {
-    const deleteResponse = await this.nftService.removeNft(id);
-    if (!deleteResponse.affected) throw new NftNotFoundException(id);
+  async removeNft(
+    @Args('id', { type: () => ID }) nftId: string,
+    @GetUser() user: UserEntity,
+  ) {
+    await this.verifyIfUserIsAuthorized(nftId, user);
 
-    return `Nft with id: ${id} has been removed`;
+    await this.nftService.removeNft(nftId);
+
+    return `Nft with id: ${nftId} has been removed`;
+  }
+
+  private async verifyIfUserIsAuthorized(nftId: string, user: UserEntity) {
+    const nft = await this.nftService.getNftById(nftId);
+    if (!nft) throw new NftNotFoundException(nftId);
+    if (nft.ownerId !== user.id || user.role !== Role.Admin) {
+      throw new UnauthorizedException(
+        `You are unable to update or delete NFT with id: ${nftId}`,
+      );
+    }
   }
 
   @UseGuards(RoleGuard(Role.Admin))
