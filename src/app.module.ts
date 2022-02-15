@@ -9,6 +9,7 @@ import { join } from 'path/posix';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { AuthModule } from './auth/auth.module';
 import { WalletsResolver } from './users/resolvers/wallets.resolver';
+import { TransactionsModule } from './transactions/transactions.module';
 
 /* TODO: 
     1. Add PostgreSQL and TypeORM // done
@@ -47,6 +48,7 @@ import { WalletsResolver } from './users/resolvers/wallets.resolver';
     CommentsModule,
     NftModule,
     AuthModule,
+    TransactionsModule,
   ],
   controllers: [],
   providers: [WalletsResolver],

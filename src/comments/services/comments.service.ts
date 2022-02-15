@@ -1,10 +1,9 @@
-import { CommentNotFoundException } from './exceptions/comment-not-found.exception';
-import { UsersService } from '../users/services/users.service';
-import { CommentRepository } from './comments.repository';
 import { Injectable } from '@nestjs/common';
-import { CreateCommentInput } from './dto/create-comment.input';
-import { UpdateCommentInput } from './dto/update-comment.input';
 import { NftService } from 'src/nft/nft.service';
+import { UsersService } from 'src/users/services/users.service';
+import { CreateCommentInput } from '../dto/create-comment.input';
+import { UpdateCommentInput } from '../dto/update-comment.input';
+import { CommentRepository } from '../repositories/comments.repository';
 
 @Injectable()
 export class CommentsService {

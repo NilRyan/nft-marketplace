@@ -1,14 +1,15 @@
-import { UseGuards, UnauthorizedException } from '@nestjs/common';
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { GqlAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
+import { UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { GetUser } from 'src/auth/get-user.decorator';
-import RoleGuard from 'src/auth/guards/role.guards';
 import { UserEntity } from 'src/users/entities/user.entity';
-import { CommentsService } from './comments.service';
-import { CreateCommentInput } from './dto/create-comment.input';
-import { UpdateCommentInput } from './dto/update-comment.input';
-import { CommentNotFoundException } from './exceptions/comment-not-found.exception';
-import { Comment } from './models/comment.model';
+import { CreateCommentInput } from '../dto/create-comment.input';
+import { UpdateCommentInput } from '../dto/update-comment.input';
+import { CommentNotFoundException } from '../exceptions/comment-not-found.exception';
+import { Comment } from '../models/comment.model';
+import { CommentsService } from '../services/comments.service';
 
+@UseGuards(GqlAuthGuard)
 @Resolver(() => Comment)
 export class CommentsResolver {
   constructor(private readonly commentsService: CommentsService) {}

@@ -7,6 +7,6 @@ import { NftResolver } from './nft.resolver';
 @Module({
   imports: [TypeOrmModule.forFeature([NftRepository])],
   providers: [NftResolver, NftService],
-  exports: [NftService],
+  exports: [NftService, TypeOrmModule.forFeature([NftRepository])],
 })
 export class NftModule {}

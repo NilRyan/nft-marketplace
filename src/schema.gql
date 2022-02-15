@@ -65,6 +65,17 @@ enum Coin {
   PhilipCoin
 }
 
+type TransactionOutput {
+  id: Float!
+  coin: Coin!
+  amount: Float!
+  transactionDate: String!
+  nft: Nft!
+  nftId: String!
+  buyer: UserProfileOutput!
+  seller: UserProfileOutput!
+}
+
 type Query {
   viewWallet: WalletOutput!
   getAllUsers: [UserProfileOutput!]!
@@ -73,6 +84,8 @@ type Query {
   getAllNfts: [Nft!]!
   getNftById(id: ID!): Nft!
   login(loginInput: LoginInput!): AccessTokenOutput!
+  transactions: [TransactionOutput!]!
+  transaction(id: Int!): TransactionOutput!
 }
 
 input LoginInput {
@@ -92,6 +105,7 @@ type Mutation {
   removeNft(id: ID!): String!
   restoreDeletedNft(id: ID!): String!
   register(registerUserInput: RegisterUserInput!): User!
+  createTransaction(createTransactionInput: CreateTransactionInput!): TransactionOutput!
 }
 
 input UpdateUserInput {
@@ -137,4 +151,9 @@ input RegisterUserInput {
   lastName: String!
   email: String!
   password: String!
+}
+
+input CreateTransactionInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
 }
