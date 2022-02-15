@@ -36,13 +36,19 @@ export class CommentsService {
     });
   }
 
+  async getCommentById(commentId: string) {
+    return await this.commentRepository.findOne(commentId, {
+      relations: ['author', 'nft'],
+    });
+ 
+  }
+
   async updateComment(updateCommentInput: UpdateCommentInput) {
     const { id } = updateCommentInput;
     await this.commentRepository.update(id, updateCommentInput);
     const updatedComment = await this.commentRepository.findOne(id, {
       relations: ['author', 'nft'],
     });
-
 
     return updatedComment;
   }

@@ -9,7 +9,7 @@ const RoleGuard = (role: Role): Type<CanActivate> => {
       context: ExecutionContext,
     ): boolean | Promise<boolean> | Observable<boolean> {
       const { user } = GqlExecutionContext.create(context).getContext().req;
-      return user?.roles.includes(role);
+      return user?.role === role;
     }
   }
   return mixin(RoleGuardMixin);

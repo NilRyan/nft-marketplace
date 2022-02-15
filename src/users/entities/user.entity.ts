@@ -1,11 +1,19 @@
 import { Exclude } from 'class-transformer';
 import Role from 'src/auth/enums/role.enum';
-import { BaseEntity } from 'src/common/entities/base.entity';
+import { BaseModel } from 'src/common/entities/base.entity';
 import { NftEntity } from 'src/nft/entities/nft.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { WalletEntity } from './wallet.entity';
 
 @Entity('users')
-export class UserEntity extends BaseEntity {
+export class UserEntity extends BaseModel {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -28,11 +36,12 @@ export class UserEntity extends BaseEntity {
   @Column()
   lastName: string;
 
-  @Column({ type: 'numeric', precision: 15, scale: 6, default: 20 })
-  balance: number;
-
   @OneToMany(() => NftEntity, (nft) => nft.owner)
   nfts?: NftEntity[];
+
+  @OneToOne(() => WalletEntity)
+  @JoinColumn()
+  wallet?: WalletEntity;
 
   @Column({
     type: 'enum',

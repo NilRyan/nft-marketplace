@@ -1,11 +1,15 @@
-import { UseGuards } from '@nestjs/common';
+import RoleGuard from 'src/auth/guards/role.guards';
+import { UserEntity } from 'src/users/entities/user.entity';
+import { UseGuards, UnauthorizedException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { GetUser } from 'src/auth/get-user.decorator';
 import { GqlAuthGuard } from './../auth/guards/graphql-jwt-auth.guard';
 import { UpdateUserInput } from './dto/update-user.input';
 import { UserProfileOutput } from './dto/user-profile.output';
 import { UserNotFoundException } from './exceptions/user-not-found.exception';
 import { User } from './models/user.model';
 import { UsersService } from './users.service';
+import Role from 'src/auth/enums/role.enum';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => User)
@@ -26,7 +30,16 @@ export class UsersResolver {
   }
 
   @Mutation(() => UserProfileOutput)
-  async updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
+  async updateUser(
+    @Args('updateUserInput') updateUserInput: UpdateUserInput,
+    @GetUser() user: UserEntity,
+  ) {
+    if (user.id !== updateUserInput.id) {
+      throw new UnauthorizedException(
+        `You can't update user with id: ${updateUserInput.id}`,
+      );
+    }
+
     const updatedUser = await this.usersService.updateUser(updateUserInput);
     if (!updatedUser) throw new UserNotFoundException(updateUserInput.id);
 
@@ -34,13 +47,19 @@ export class UsersResolver {
   }
 
   @Mutation(() => String)
-  async removeUser(@Args('id', { type: () => String }) id: string) {
+  async removeUser(
+    @Args('id', { type: () => String }) id: string,
+    @GetUser() user: UserEntity,
+  ) {
+    if (user.id !== id || user.role !== Role.Admin) {
+      throw new UnauthorizedException(`You can't delete user with id: ${id}`);
+    }
     const deleteResponse = await this.usersService.removeUser(id);
     if (!deleteResponse.affected) throw new UserNotFoundException(id);
     return `User with id: ${id} has been removed`;
   }
 
-  // TODO: Role Admin only
+  @UseGuards(RoleGuard(Role.Admin))
   @Mutation(() => String)
   async restoreDeletedUser(@Args('id', { type: () => String }) id: string) {
     const restoreResponse = await this.usersService.restoreDeletedUser(id);

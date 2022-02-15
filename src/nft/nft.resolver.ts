@@ -8,6 +8,8 @@ import { UpdateNftInput } from './dto/update-nft.input';
 import { Nft } from './models/nft.model';
 import { GqlAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
 import { NftNotFoundException } from './exceptions/nft-not-found.exception';
+import RoleGuard from 'src/auth/guards/role.guards';
+import Role from 'src/auth/enums/role.enum';
 @UseGuards(GqlAuthGuard)
 @Resolver((of) => Nft)
 export class NftResolver {
@@ -53,6 +55,7 @@ export class NftResolver {
     return `Nft with id: ${id} has been removed`;
   }
 
+  @UseGuards(RoleGuard(Role.Admin))
   @Mutation(() => String)
   async restoreDeletedNft(@Args('id', { type: () => ID }) id: string) {
     const restoreResponse = await this.nftService.restoreDeletedNft(id);

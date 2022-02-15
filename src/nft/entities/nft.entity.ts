@@ -1,5 +1,5 @@
 import { CommentEntity } from 'src/comments/entities/comment.entity';
-import { BaseEntity } from 'src/common/entities/base.entity';
+import { BaseModel } from 'src/common/entities/base.entity';
 import { UserEntity } from 'src/users/entities/user.entity';
 import {
   Column,
@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 
 @Entity('nft')
-export class NftEntity extends BaseEntity {
+export class NftEntity extends BaseModel {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
