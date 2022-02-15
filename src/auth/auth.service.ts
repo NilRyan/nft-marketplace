@@ -1,5 +1,4 @@
 import { LoginInput } from './dto/login.input';
-import { UsersService } from 'src/users/users.service';
 import {
   BadRequestException,
   HttpException,
@@ -12,6 +11,7 @@ import { RegisterUserInput } from './dto/register-user.input';
 import * as bcrypt from 'bcrypt';
 import PostgresErrorCode from 'src/database/postgres-error-code.enum';
 import { ConfigService } from '@nestjs/config';
+import { UsersService } from 'src/users/services/users.service';
 @Injectable()
 export class AuthService {
   constructor(

@@ -3,13 +3,13 @@ import { UserEntity } from 'src/users/entities/user.entity';
 import { UseGuards, UnauthorizedException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GetUser } from 'src/auth/get-user.decorator';
-import { GqlAuthGuard } from './../auth/guards/graphql-jwt-auth.guard';
-import { UpdateUserInput } from './dto/update-user.input';
-import { UserProfileOutput } from './dto/user-profile.output';
-import { UserNotFoundException } from './exceptions/user-not-found.exception';
-import { User } from './models/user.model';
-import { UsersService } from './users.service';
 import Role from 'src/auth/enums/role.enum';
+import { GqlAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
+import { UpdateUserInput } from '../dto/update-user.input';
+import { UserProfileOutput } from '../dto/user-profile.output';
+import { UserNotFoundException } from '../exceptions/user-not-found.exception';
+import { User } from '../models/user.model';
+import { UsersService } from '../services/users.service';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => User)

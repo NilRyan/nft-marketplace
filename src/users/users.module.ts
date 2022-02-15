@@ -1,9 +1,9 @@
-import { WalletRepository } from './wallets.repository';
+import { WalletRepository } from './repositories/wallets.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { UsersResolver } from './users.resolver';
-import { UsersRepository } from './users.repository';
+import { UsersService } from './services/users.service';
+import { UsersResolver } from './resolvers/users.resolver';
+import { UsersRepository } from './repositories/users.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UsersRepository, WalletRepository])],

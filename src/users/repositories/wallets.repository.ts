@@ -1,6 +1,6 @@
 import { UserEntity } from 'src/users/entities/user.entity';
-import { WalletEntity } from './entities/wallet.entity';
 import { EntityRepository, Repository } from 'typeorm';
+import { WalletEntity } from '../entities/wallet.entity';
 
 @EntityRepository(WalletEntity)
 export class WalletRepository extends Repository<WalletEntity> {

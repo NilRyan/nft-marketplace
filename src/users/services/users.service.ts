@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { RegisterUserInput } from 'src/auth/dto/register-user.input';
-import { UpdateUserInput } from './dto/update-user.input';
-import { UserEntity } from './entities/user.entity';
-import { UsersRepository } from './users.repository';
-import { WalletRepository } from './wallets.repository';
+import { UpdateUserInput } from '../dto/update-user.input';
+import { UserEntity } from '../entities/user.entity';
+import { UsersRepository } from '../repositories/users.repository';
+import { WalletRepository } from '../repositories/wallets.repository';
 
 @Injectable()
 export class UsersService {

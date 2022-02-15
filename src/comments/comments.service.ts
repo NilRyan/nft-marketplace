@@ -1,5 +1,5 @@
 import { CommentNotFoundException } from './exceptions/comment-not-found.exception';
-import { UsersService } from './../users/users.service';
+import { UsersService } from '../users/services/users.service';
 import { CommentRepository } from './comments.repository';
 import { Injectable } from '@nestjs/common';
 import { CreateCommentInput } from './dto/create-comment.input';
@@ -40,7 +40,6 @@ export class CommentsService {
     return await this.commentRepository.findOne(commentId, {
       relations: ['author', 'nft'],
     });
- 
   }
 
   async updateComment(updateCommentInput: UpdateCommentInput) {

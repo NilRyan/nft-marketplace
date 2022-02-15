@@ -7,7 +7,7 @@ import { CommentsService } from './comments.service';
 import { CommentsResolver } from './comments.resolver';
 import { CommentRepository } from './comments.repository';
 import { UsersModule } from 'src/users/users.module';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/users/services/users.service';
 
 @Module({
   imports: [
