@@ -62,7 +62,7 @@ export class AuthService {
       secret: this.configService.get('JWT_SECRET'),
     });
     if (!id) throw new UnauthorizedException('Invalid token');
-    return await this.usersService.getUser(id);
+    return await this.usersService.getUserById(id);
   }
 
   private async verifyPassword(

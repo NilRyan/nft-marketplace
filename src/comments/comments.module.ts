@@ -1,3 +1,4 @@
+import { NftRepository } from './../nft/nft.repository';
 import { NftService } from './../nft/nft.service';
 import { NftModule } from './../nft/nft.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -10,7 +11,7 @@ import { UsersService } from 'src/users/users.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([CommentRepository]),
+    TypeOrmModule.forFeature([CommentRepository, NftRepository]),
     UsersModule,
     NftModule,
   ],

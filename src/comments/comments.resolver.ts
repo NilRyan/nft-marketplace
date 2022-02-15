@@ -2,6 +2,7 @@ import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { CommentsService } from './comments.service';
 import { CreateCommentInput } from './dto/create-comment.input';
 import { UpdateCommentInput } from './dto/update-comment.input';
+import { CommentNotFoundException } from './exceptions/comment-not-found.exception';
 import { Comment } from './models/comment.model';
 
 @Resolver(() => Comment)
@@ -21,15 +22,23 @@ export class CommentsResolver {
   }
 
   @Mutation(() => Comment)
-  updateComment(
+  async updateComment(
     @Args('updateCommentInput') updateCommentInput: UpdateCommentInput,
   ) {
-    return this.commentsService.updateComment(updateCommentInput);
+    const updatedComment = await this.commentsService.updateComment(
+      updateCommentInput,
+    );
+    if (!updatedComment) {
+      throw new CommentNotFoundException(updateCommentInput.id);
+    }
+
+    return updatedComment;
   }
 
   @Mutation(() => String)
-  removeComment(@Args('id', { type: () => String }) id: string) {
-    this.commentsService.removeComment(id);
+  async removeComment(@Args('id', { type: () => String }) id: string) {
+    const deleteResponse = await this.commentsService.removeComment(id);
+    if (!deleteResponse) throw new CommentNotFoundException(id);
     return `Comment with id: ${id} has been removed`;
   }
 }

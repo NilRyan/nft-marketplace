@@ -1,9 +1,8 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { CreateNftInput } from './dto/create-nft.input';
 import { UpdateNftInput } from './dto/update-nft.input';
 import { NftEntity } from './entities/nft.entity';
-import { NftNotFoundException } from './exceptions/nft-not-found.exception';
 import { NftRepository } from './nft.repository';
 
 @Injectable()
@@ -30,7 +29,6 @@ export class NftService {
     const nft = await this.nftRepository.findOne(id, {
       relations: ['owner', 'comments'],
     });
-    if (!nft) throw new NftNotFoundException(id);
     return nft;
   }
 
@@ -41,25 +39,14 @@ export class NftService {
       relations: ['owner', 'comments'],
     });
 
-    if (!updatedPost) {
-      this.logger.warn(`Nft with id: ${id} not found`);
-      throw new NftNotFoundException(id);
-    }
-
     return updatedPost;
   }
 
   async removeNft(id: string) {
-    const deleteResponse = await this.nftRepository.softDelete(id);
-    if (!deleteResponse.affected) {
-      throw new NftNotFoundException(id);
-    }
+    return await this.nftRepository.softDelete(id);
   }
 
   async restoreDeletedNft(id: string) {
-    const restoreResponse = await this.nftRepository.restore(id);
-    if (!restoreResponse.affected) {
-      throw new NftNotFoundException(id);
-    }
+    return await this.nftRepository.restore(id);
   }
 }

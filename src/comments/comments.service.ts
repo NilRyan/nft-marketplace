@@ -43,17 +43,11 @@ export class CommentsService {
       relations: ['author', 'nft'],
     });
 
-    if (!updatedComment) {
-      throw new CommentNotFoundException(id);
-    }
 
     return updatedComment;
   }
 
   async removeComment(id: string) {
-    const deleteResponse = await this.commentRepository.delete(id);
-    if (!deleteResponse.affected) {
-      throw new CommentNotFoundException(id);
-    }
+    return await this.commentRepository.delete(id);
   }
 }

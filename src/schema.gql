@@ -14,10 +14,12 @@ type UserProfileOutput {
 type Comment {
   id: String!
   comment: String!
-  user: User!
-  userId: String!
+  author: UserProfileOutput!
+  authorId: String!
   nft: Nft!
   nftId: String!
+  createdAt: String!
+  updatedAt: String!
 }
 
 type Nft {
@@ -50,8 +52,7 @@ type AccessTokenOutput {
 type Query {
   getAllUsers: [UserProfileOutput!]!
   getUserProfile(id: String!): UserProfileOutput!
-  comments: [Comment!]!
-  comment(id: Int!): Comment!
+  getCommentsForNft(nftId: String!): [Comment!]!
   getAllNfts: [Nft!]!
   getNftById(id: ID!): Nft!
   login(loginInput: LoginInput!): AccessTokenOutput!
@@ -68,7 +69,7 @@ type Mutation {
   restoreDeletedUser(id: String!): String!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
-  removeComment(id: Int!): Comment!
+  removeComment(id: String!): String!
   createNft(createNftInput: CreateNftInput!): Nft!
   updateNft(updateNftInput: UpdateNftInput!): Nft!
   removeNft(id: ID!): String!
@@ -86,14 +87,14 @@ input UpdateUserInput {
 }
 
 input CreateCommentInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  comment: String!
+  nftId: String!
+  authorId: String!
 }
 
 input UpdateCommentInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  id: String!
+  comment: String!
 }
 
 input CreateNftInput {

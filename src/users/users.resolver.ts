@@ -1,12 +1,11 @@
-import { UserEntity } from 'src/users/entities/user.entity';
 import { UseGuards } from '@nestjs/common';
-import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { GetUser } from 'src/auth/get-user.decorator';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlAuthGuard } from './../auth/guards/graphql-jwt-auth.guard';
 import { UpdateUserInput } from './dto/update-user.input';
+import { UserProfileOutput } from './dto/user-profile.output';
+import { UserNotFoundException } from './exceptions/user-not-found.exception';
 import { User } from './models/user.model';
 import { UsersService } from './users.service';
-import { UserProfileOutput } from './dto/user-profile.output';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => User)
@@ -19,25 +18,34 @@ export class UsersResolver {
   }
 
   @Query(() => UserProfileOutput)
-  getUserProfile(@Args('id', { type: () => String }) id: string) {
-    return this.usersService.getUser(id);
+  async getUserProfile(@Args('id', { type: () => String }) id: string) {
+    const user = await this.usersService.getUserById(id);
+    if (!user) throw new UserNotFoundException(id);
+
+    return user;
   }
 
   @Mutation(() => UserProfileOutput)
-  updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
-    return this.usersService.updateUser(updateUserInput);
+  async updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
+    const updatedUser = await this.usersService.updateUser(updateUserInput);
+    if (!updatedUser) throw new UserNotFoundException(updateUserInput.id);
+
+    return updatedUser;
   }
 
   @Mutation(() => String)
-  removeUser(@Args('id', { type: () => String }) id: string) {
-    this.usersService.removeUser(id);
+  async removeUser(@Args('id', { type: () => String }) id: string) {
+    const deleteResponse = await this.usersService.removeUser(id);
+    if (!deleteResponse.affected) throw new UserNotFoundException(id);
     return `User with id: ${id} has been removed`;
   }
 
   // TODO: Role Admin only
   @Mutation(() => String)
-  restoreDeletedUser(@Args('id', { type: () => String }) id: string) {
-    this.usersService.restoreDeletedUser(id);
+  async restoreDeletedUser(@Args('id', { type: () => String }) id: string) {
+    const restoreResponse = await this.usersService.restoreDeletedUser(id);
+    if (!restoreResponse.affected) throw new UserNotFoundException(id);
+
     return `User with id: ${id} has been restored`;
   }
 }

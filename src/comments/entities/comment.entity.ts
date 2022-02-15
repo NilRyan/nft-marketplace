@@ -21,7 +21,7 @@ export class CommentEntity extends BaseEntity {
   @ManyToOne((type) => UserEntity)
   author: UserEntity;
 
-  @RelationId((comment: CommentEntity) => comment.user)
+  @RelationId((comment: CommentEntity) => comment.author)
   authorId: string;
 
   @ManyToOne((type) => NftEntity, (nft) => nft.comments)

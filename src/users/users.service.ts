@@ -3,13 +3,13 @@ import { RegisterUserInput } from 'src/auth/dto/register-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { UserEntity } from './entities/user.entity';
 import { UserNotFoundException } from './exceptions/user-not-found.exception';
-import { UserRepository } from './user.repository';
+import { UsersRepository } from './users.repository';
 
 @Injectable()
 export class UsersService {
   private readonly logger = new Logger(UsersService.name);
 
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly userRepository: UsersRepository) {}
 
   async create(registrationData: RegisterUserInput): Promise<UserEntity> {
     return await this.userRepository.save(registrationData);
@@ -25,10 +25,6 @@ export class UsersService {
       relations: ['nfts'],
     });
 
-    if (!user) {
-      this.logger.warn(`User with id: ${id} not found`);
-      throw new UserNotFoundException(id);
-    }
     return user;
   }
 
@@ -38,30 +34,18 @@ export class UsersService {
     const updatedUser = await this.userRepository.findOne(id, {
       relations: ['nfts'],
     });
-
-    if (!updatedUser) {
-      this.logger.warn(`User with id: ${id} not found`);
-      throw new UserNotFoundException(id);
-    }
     return updatedUser;
   }
 
   async removeUser(id: string) {
-    const deleteResponse = await this.userRepository.softDelete(id);
-    if (!deleteResponse.affected) {
-      throw new UserNotFoundException(id);
-    }
+    return await this.userRepository.softDelete(id);
   }
 
   async restoreDeletedUser(id: string) {
-    const restoreResponse = await this.userRepository.restore(id);
-    if (!restoreResponse.affected) {
-      throw new UserNotFoundException(id);
-    }
+    return await this.userRepository.restore(id);
   }
 
   async getUserByUsername(username: string): Promise<UserEntity> {
     return await this.userRepository.findOne({ where: { username } });
   }
-
 }

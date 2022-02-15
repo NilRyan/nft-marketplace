@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
-import { UserRepository } from 'src/users/user.repository';
+import { UsersRepository } from 'src/users/users.repository';
 import { UsersModule } from 'src/users/users.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
@@ -20,7 +20,7 @@ import { JwtStrategy } from './jwt-strategy';
         signOptions: { expiresIn: +configService.get('JWT_EXPIRY') },
       }),
     }),
-    TypeOrmModule.forFeature([UserRepository]),
+    TypeOrmModule.forFeature([UsersRepository]),
     ConfigModule,
     UsersModule,
   ],
