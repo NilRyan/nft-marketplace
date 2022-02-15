@@ -3,7 +3,7 @@ import { RegisterUserInput } from 'src/auth/dto/register-user.input';
 import { UpdateUserInput } from '../dto/update-user.input';
 import { UserEntity } from '../entities/user.entity';
 import { UsersRepository } from '../repositories/users.repository';
-import { WalletRepository } from '../repositories/wallets.repository';
+import { WalletsService } from './wallets.service';
 
 @Injectable()
 export class UsersService {
@@ -11,13 +11,16 @@ export class UsersService {
 
   constructor(
     private readonly userRepository: UsersRepository,
-    private readonly walletRepository: WalletRepository,
+    private readonly walletsService: WalletsService,
   ) {}
 
-  async createUser(registrationData: RegisterUserInput): Promise<UserEntity> {
-    const user = await this.userRepository.create(registrationData);
-    const wallet = await this.walletRepository.createWallet(user);
+  async createUserWithWallet(
+    registrationData: RegisterUserInput,
+  ): Promise<UserEntity> {
+    const user = await this.userRepository.createUser(registrationData);
+    const wallet = await this.walletsService.createWallet(user);
     user.wallet = wallet;
+    user.walletId = wallet.id;
     return await this.userRepository.save(user);
   }
   async getAllUsers() {

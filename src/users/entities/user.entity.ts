@@ -1,3 +1,4 @@
+import { ResolveField } from '@nestjs/graphql';
 import { Exclude } from 'class-transformer';
 import Role from 'src/auth/enums/role.enum';
 import { BaseModel } from 'src/common/entities/base.entity';
@@ -9,6 +10,7 @@ import {
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  RelationId,
 } from 'typeorm';
 import { WalletEntity } from './wallet.entity';
 
@@ -42,6 +44,9 @@ export class UserEntity extends BaseModel {
   @OneToOne(() => WalletEntity)
   @JoinColumn()
   wallet?: WalletEntity;
+
+  @RelationId((user: UserEntity) => user.wallet)
+  walletId?: string;
 
   @Column({
     type: 'enum',

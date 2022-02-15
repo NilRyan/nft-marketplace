@@ -24,7 +24,7 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(registrationData.password, 10);
     console.log(hashedPassword);
     try {
-      const createdUser = await this.usersService.createUser({
+      const createdUser = await this.usersService.createUserWithWallet({
         ...registrationData,
         password: hashedPassword,
       });

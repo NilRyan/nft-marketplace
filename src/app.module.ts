@@ -8,6 +8,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path/posix';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { AuthModule } from './auth/auth.module';
+import { WalletsResolver } from './users/resolvers/wallets.resolver';
 
 /* TODO: 
     1. Add PostgreSQL and TypeORM // done
@@ -48,6 +49,6 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [WalletsResolver],
 })
 export class AppModule {}

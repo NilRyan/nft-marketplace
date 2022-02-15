@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import Coin from '../enums/coin.enum';
 import { User } from '../models/user.model';
 
 @ObjectType()
@@ -16,5 +17,8 @@ export class WalletOutput {
   owner: User;
 
   @Field()
-  userId: string;
+  ownerId: string;
+
+  @Field(() => Coin)
+  coin: Coin;
 }

@@ -49,7 +49,24 @@ type AccessTokenOutput {
   accessToken: String!
 }
 
+type WalletOutput {
+  id: String!
+  address: String!
+  balance: Float!
+  owner: User!
+  ownerId: String!
+  coin: Coin!
+}
+
+"""Coin type"""
+enum Coin {
+  CalapeCoin
+  ArgCoin
+  PhilipCoin
+}
+
 type Query {
+  viewWallet: WalletOutput!
   getAllUsers: [UserProfileOutput!]!
   getUserProfile(id: String!): UserProfileOutput!
   getCommentsForNft(nftId: String!): [Comment!]!
