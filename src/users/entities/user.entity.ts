@@ -1,4 +1,5 @@
 import { Exclude } from 'class-transformer';
+import Role from 'src/auth/enums/role.enum';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { NftEntity } from 'src/nft/entities/nft.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
@@ -32,4 +33,11 @@ export class UserEntity extends BaseEntity {
 
   @OneToMany(() => NftEntity, (nft) => nft.owner)
   nfts?: NftEntity[];
+
+  @Column({
+    type: 'enum',
+    enum: Role,
+    default: Role.User,
+  })
+  role: Role;
 }
