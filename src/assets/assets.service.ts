@@ -48,6 +48,11 @@ export class AssetsService {
 
     return updatedPost;
   }
+  async increaseAssetValue(asset: AssetEntity) {
+    const { price, id } = asset;
+    const newPrice = price + 1;
+    await this.assetRepository.update(id, { price: newPrice });
+  }
 
   async removeAsset(id: string) {
     return await this.assetRepository.softDelete(id);

@@ -6,13 +6,13 @@ import { Asset } from 'src/assets/models/asset.model';
 @ObjectType()
 export class TransactionOutput {
   @Field()
-  id: number;
+  id: string;
   @Field((type) => Coin)
   coin: Coin;
   @Field()
   amount: number;
   @Field()
-  transactionDate: string;
+  createdAt: string;
   @Field((type) => Asset)
   asset: Asset;
   @Field()

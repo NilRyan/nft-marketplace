@@ -66,10 +66,10 @@ enum Coin {
 }
 
 type TransactionOutput {
-  id: Float!
+  id: String!
   coin: Coin!
   amount: Float!
-  transactionDate: String!
+  createdAt: String!
   asset: Asset!
   assetId: String!
   buyer: UserProfileOutput!
