@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import * as currency from 'currency.js';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { AssetsRepository } from './assets.repository';
 import { CreateAssetInput } from './dto/create-asset.input';
@@ -50,7 +51,8 @@ export class AssetsService {
   }
   async increaseAssetValue(asset: AssetEntity) {
     const { price, id } = asset;
-    const newPrice = price + 1;
+    // NOTE: Price growth is 10%
+    const newPrice = currency(price, { precision: 8 }).multiply(1.1).value;
     await this.assetRepository.update(id, { price: newPrice });
   }
 

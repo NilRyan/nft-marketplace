@@ -28,31 +28,45 @@ export class TransactionsService {
       asset.owner,
     );
 
-    const transaction = await this.createTransaction(
+    const transaction = this.createTransaction(
       asset,
       buyerWallet,
       sellerWallet,
     );
-    await this.walletsService.increaseBalance(buyer, asset.price);
-    await this.walletsService.decreaseBalance(asset.owner, asset.price);
+    await this.walletsService.increaseBalance(buyerWallet, asset.price);
+    await this.walletsService.decreaseBalance(sellerWallet, asset.price);
     await this.assetsService.transferOwnership(assetId, buyer);
     await this.assetsService.increaseAssetValue(asset);
+    await this.transactionRepository.save(transaction);
 
-    return await this.transactionRepository.save(transaction);
+    return transaction;
   }
 
-  async viewTransactions({ id }: UserEntity) {
+  async viewTransactions(user: UserEntity) {
     return await this.transactionRepository.find({
-      where: [{ buyerId: id }, { sellerId: id }],
+      where: [
+        {
+          buyer: user,
+        },
+        { seller: user },
+      ],
+      relations: [
+        'asset',
+        'buyerWallet',
+        'sellerWallet',
+        'buyer',
+        'seller',
+        'asset.owner',
+      ],
     });
   }
 
-  private async createTransaction(
+  private createTransaction(
     asset: AssetEntity,
     buyerWallet: WalletEntity,
     sellerWallet: WalletEntity,
   ) {
-    return this.transactionRepository.create({
+    const transaction = {
       asset,
       buyerWallet,
       sellerWallet,
@@ -64,6 +78,8 @@ export class TransactionsService {
       amount: asset.price,
       buyerWalletId: buyerWallet.id,
       sellerWalletId: sellerWallet.id,
-    });
+    };
+    this.transactionRepository.create(transaction);
+    return transaction;
   }
 }

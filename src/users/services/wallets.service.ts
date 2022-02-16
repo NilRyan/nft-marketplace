@@ -1,6 +1,8 @@
 import { UserEntity } from 'src/users/entities/user.entity';
 import { WalletRepository } from './../repositories/wallets.repository';
 import { Injectable, Logger } from '@nestjs/common';
+import { WalletEntity } from '../entities/wallet.entity';
+import * as currency from 'currency.js';
 
 @Injectable()
 export class WalletsService {
@@ -18,11 +20,21 @@ export class WalletsService {
     });
   }
   // TODO: implement balance logic with currency js
-  async increaseBalance(wallet: UserEntity, amount: number) {
-    return 'Balance increased';
+  async increaseBalance(wallet: WalletEntity, amount: number) {
+    const increasedBalance = currency(wallet.balance, { precision: 8 }).add(
+      amount,
+    ).value;
+    await this.walletRepository.update(wallet.id, {
+      balance: increasedBalance,
+    });
   }
 
-  async decreaseBalance(wallet: UserEntity, amount: number) {
-    return 'Balance decreased';
+  async decreaseBalance(wallet: WalletEntity, amount: number) {
+    const decreasedBalance = currency(wallet.balance, {
+      precision: 8,
+    }).subtract(amount).value;
+    await this.walletRepository.update(wallet.id, {
+      balance: decreasedBalance,
+    });
   }
 }
