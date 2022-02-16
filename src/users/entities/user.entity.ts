@@ -1,8 +1,8 @@
 import { ResolveField } from '@nestjs/graphql';
 import { Exclude } from 'class-transformer';
+import { AssetEntity } from 'src/assets/entities/asset.entity';
 import Role from 'src/auth/enums/role.enum';
 import { BaseModel } from 'src/common/entities/base.entity';
-import { NftEntity } from 'src/nft/entities/nft.entity';
 import {
   Column,
   Entity,
@@ -38,8 +38,8 @@ export class UserEntity extends BaseModel {
   @Column()
   lastName: string;
 
-  @OneToMany(() => NftEntity, (nft) => nft.owner)
-  nfts?: NftEntity[];
+  @OneToMany(() => AssetEntity, (asset) => asset.owner)
+  assets?: AssetEntity[];
 
   @OneToOne(() => WalletEntity)
   @JoinColumn()

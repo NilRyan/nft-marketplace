@@ -1,7 +1,7 @@
 import { UserProfileOutput } from 'src/users/dto/user-profile.output';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Nft } from 'src/nft/models/nft.model';
 import Coin from 'src/users/enums/coin.enum';
+import { Asset } from 'src/assets/models/asset.model';
 
 @ObjectType()
 export class TransactionOutput {
@@ -13,10 +13,10 @@ export class TransactionOutput {
   amount: number;
   @Field()
   transactionDate: string;
-  @Field((type) => Nft)
-  nft: Nft;
+  @Field((type) => Asset)
+  asset: Asset;
   @Field()
-  nftId: string;
+  assetId: string;
   @Field()
   buyer: UserProfileOutput;
   @Field()

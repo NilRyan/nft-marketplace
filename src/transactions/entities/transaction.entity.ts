@@ -1,5 +1,3 @@
-import { NftEntity } from 'src/nft/entities/nft.entity';
-import { Nft } from 'src/nft/models/nft.model';
 import { BaseModel } from 'src/common/entities/base.entity';
 import Coin from 'src/users/enums/coin.enum';
 import {
@@ -12,6 +10,7 @@ import {
   RelationId,
 } from 'typeorm';
 import { WalletEntity } from 'src/users/entities/wallet.entity';
+import { AssetEntity } from 'src/assets/entities/asset.entity';
 
 @Entity('transactions')
 export class TransactionEntity extends BaseModel {
@@ -28,12 +27,12 @@ export class TransactionEntity extends BaseModel {
   @Column({ type: 'numeric', precision: 15, scale: 6, default: 20 })
   amount: number;
 
-  @ManyToOne((type) => NftEntity)
+  @ManyToOne((type) => AssetEntity)
   @JoinColumn()
-  nft: NftEntity;
+  asset: AssetEntity;
 
-  @RelationId((transaction: TransactionEntity) => transaction.nft)
-  nftId: string;
+  @RelationId((transaction: TransactionEntity) => transaction.asset)
+  assetId: string;
 
   @ManyToOne((type) => WalletEntity)
   @JoinColumn()

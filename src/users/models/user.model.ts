@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Nft } from 'src/nft/models/nft.model';
+import { Asset } from 'src/assets/models/asset.model';
 
 @ObjectType()
 export class User {
@@ -24,6 +24,6 @@ export class User {
   @Field()
   balance: number;
 
-  @Field(() => [Nft])
-  nfts?: Nft[];
+  @Field(() => [Asset])
+  assets?: Asset[];
 }

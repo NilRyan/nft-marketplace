@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { NftService } from 'src/nft/nft.service';
+import { AssetsService } from 'src/assets/assets.service';
 import { UsersService } from 'src/users/services/users.service';
 import { CreateCommentInput } from '../dto/create-comment.input';
 import { UpdateCommentInput } from '../dto/update-comment.input';
@@ -10,26 +10,26 @@ export class CommentsService {
   constructor(
     private readonly commentRepository: CommentRepository,
     private readonly usersService: UsersService,
-    private readonly nftService: NftService,
+    private readonly assetsService: AssetsService,
   ) {}
 
   async createComment(createCommentInput: CreateCommentInput) {
-    const { authorId, nftId } = createCommentInput;
+    const { authorId, assetId } = createCommentInput;
     const author = await this.usersService.getUserById(authorId);
-    const nft = await this.nftService.getNftById(nftId);
+    const asset = await this.assetsService.getAssetById(assetId);
     const newComment = this.commentRepository.create({
       ...createCommentInput,
       author,
-      nft,
+      asset,
     });
     return this.commentRepository.save(newComment);
   }
 
-  async getCommentsForNft(nftId: string) {
+  async getCommentsForAsset(assetId: string) {
     return await this.commentRepository.find({
       where: {
-        nft: {
-          id: nftId,
+        asset: {
+          id: assetId,
         },
       },
     });
@@ -37,7 +37,7 @@ export class CommentsService {
 
   async getCommentById(commentId: string) {
     return await this.commentRepository.findOne(commentId, {
-      relations: ['author', 'nft'],
+      relations: ['author', 'asset'],
     });
   }
 
@@ -45,7 +45,7 @@ export class CommentsService {
     const { id } = updateCommentInput;
     await this.commentRepository.update(id, updateCommentInput);
     const updatedComment = await this.commentRepository.findOne(id, {
-      relations: ['author', 'nft'],
+      relations: ['author', 'asset'],
     });
 
     return updatedComment;

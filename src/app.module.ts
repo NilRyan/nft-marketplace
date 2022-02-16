@@ -3,13 +3,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './users/users.module';
 import { CommentsModule } from './comments/comments.module';
-import { NftModule } from './nft/nft.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path/posix';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { AuthModule } from './auth/auth.module';
 import { WalletsResolver } from './users/resolvers/wallets.resolver';
 import { TransactionsModule } from './transactions/transactions.module';
+import { AssetsModule } from './assets/assets.module';
 
 /* TODO: 
     1. Add PostgreSQL and TypeORM // done
@@ -46,7 +46,7 @@ import { TransactionsModule } from './transactions/transactions.module';
     DatabaseModule,
     UsersModule,
     CommentsModule,
-    NftModule,
+    AssetsModule,
     AuthModule,
     TransactionsModule,
   ],

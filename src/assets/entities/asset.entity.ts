@@ -10,8 +10,8 @@ import {
   RelationId,
 } from 'typeorm';
 
-@Entity('nft')
-export class NftEntity extends BaseModel {
+@Entity('asset')
+export class AssetEntity extends BaseModel {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -33,13 +33,13 @@ export class NftEntity extends BaseModel {
   @Column()
   category: string;
 
-  @ManyToOne((type) => UserEntity, (user) => user.nfts)
+  @ManyToOne((type) => UserEntity, (user) => user.assets)
   owner: UserEntity;
 
-  @RelationId((nft: NftEntity) => nft.owner)
+  @RelationId((asset: AssetEntity) => asset.owner)
   ownerId: string;
 
-  @OneToMany(() => CommentEntity, (comment: CommentEntity) => comment.nft, {
+  @OneToMany(() => CommentEntity, (comment: CommentEntity) => comment.asset, {
     nullable: true,
   })
   comments?: CommentEntity[];

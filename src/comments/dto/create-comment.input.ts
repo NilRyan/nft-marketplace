@@ -6,7 +6,7 @@ export class CreateCommentInput {
   comment: string;
 
   @Field()
-  nftId: string;
+  assetId: string;
 
   @Field()
   authorId: string;

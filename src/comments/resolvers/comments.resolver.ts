@@ -22,8 +22,8 @@ export class CommentsResolver {
   }
 
   @Query(() => [Comment])
-  getCommentsForNft(@Args('nftId', { type: () => String }) nftId: string) {
-    return this.commentsService.getCommentsForNft(nftId);
+  getCommentsForAsset(@Args('assetId', { type: () => String }) assetId: string) {
+    return this.commentsService.getCommentsForAsset(assetId);
   }
 
   @Mutation(() => Comment)

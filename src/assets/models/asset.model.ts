@@ -1,9 +1,9 @@
-import { UserProfileOutput } from './../../users/dto/user-profile.output';
+import { UserProfileOutput } from '../../users/dto/user-profile.output';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Comment } from 'src/comments/models/comment.model';
 
 @ObjectType()
-export class Nft {
+export class Asset {
   @Field()
   id: string;
 

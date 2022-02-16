@@ -1,11 +1,11 @@
 version: "3.1"
 services:
   postgres:
-    container_name: postgres-nft
+    container_name: postgres-asset
     image: postgres:latest
     ports:
     - "5435:5432"
     volumes:
-    - /data/postgres:/data/nft
+    - /data/postgres:/data/asset
     env_file:
     - docker.env

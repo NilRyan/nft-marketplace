@@ -1,5 +1,5 @@
+import { AssetEntity } from 'src/assets/entities/asset.entity';
 import { BaseModel } from 'src/common/entities/base.entity';
-import { NftEntity } from 'src/nft/entities/nft.entity';
 import { UserEntity } from 'src/users/entities/user.entity';
 import {
   Entity,
@@ -23,9 +23,9 @@ export class CommentEntity extends BaseModel {
   @RelationId((comment: CommentEntity) => comment.author)
   authorId: string;
 
-  @ManyToOne((type) => NftEntity, (nft) => nft.comments)
-  nft: NftEntity;
+  @ManyToOne((type) => AssetEntity, (asset) => asset.comments)
+  asset: AssetEntity;
 
-  @RelationId((comment: CommentEntity) => comment.nft)
-  nftId: string;
+  @RelationId((comment: CommentEntity) => comment.asset)
+  assetId: string;
 }

@@ -25,13 +25,13 @@ export class UsersService {
   }
   async getAllUsers() {
     return await this.userRepository.find({
-      relations: ['nfts'],
+      relations: ['assets'],
     });
   }
 
   async getUserById(id: string): Promise<UserEntity> {
     const user = await this.userRepository.findOne(id, {
-      relations: ['nfts'],
+      relations: ['assets'],
     });
 
     return user;
@@ -41,7 +41,7 @@ export class UsersService {
     const { id } = updateUserInput;
     await this.userRepository.update(id, updateUserInput);
     const updatedUser = await this.userRepository.findOne(id, {
-      relations: ['nfts'],
+      relations: ['assets'],
     });
     return updatedUser;
   }
