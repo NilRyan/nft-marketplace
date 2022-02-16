@@ -1,5 +1,5 @@
 import { UserProfileOutput } from '../../users/dto/user-profile.output';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
 import { Comment } from 'src/comments/models/comment.model';
 
 @ObjectType()
@@ -22,8 +22,8 @@ export class Asset {
   @Field({ nullable: true })
   lastSale?: string;
 
-  @Field()
-  createdAt: string;
+  @Field(() => GraphQLISODateTime)
+  createdAt: Date;
 
   @Field({ nullable: true })
   category?: string;

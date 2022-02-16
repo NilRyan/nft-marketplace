@@ -13,7 +13,7 @@ export class AssetsService {
 
   constructor(private readonly assetRepository: AssetsRepository) {}
   async createAsset(createAssetInput: CreateAssetInput, user: UserEntity) {
-    const newAsset = await this.assetRepository.create({
+    const newAsset = this.assetRepository.create({
       ...createAssetInput,
       owner: user,
     });

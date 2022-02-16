@@ -1,5 +1,5 @@
 import { UserProfileOutput } from 'src/users/dto/user-profile.output';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType, GraphQLISODateTime } from '@nestjs/graphql';
 import Coin from 'src/users/enums/coin.enum';
 import { Asset } from 'src/assets/models/asset.model';
 
@@ -11,8 +11,8 @@ export class TransactionOutput {
   coin: Coin;
   @Field()
   amount: number;
-  @Field()
-  createdAt: string;
+  @Field(() => GraphQLISODateTime)
+  createdAt: Date;
   @Field((type) => Asset)
   asset: Asset;
   @Field()
