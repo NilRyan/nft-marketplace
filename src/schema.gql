@@ -100,9 +100,8 @@ type Mutation {
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
   removeComment(id: String!): String!
   createAsset(createAssetInput: CreateAssetInput!): Asset!
-  updateAsset(updateAssetInput: UpdateAssetInput!): Asset!
-  removeAsset(id: ID!): String!
-  restoreDeletedAsset(id: ID!): String!
+  deleteAsset(id: ID!): Asset!
+  restoreDeletedAsset(id: ID!): Asset!
   register(registerUserInput: RegisterUserInput!): User!
   buyAsset(assetId: String!): TransactionOutput!
 }
@@ -133,15 +132,6 @@ input CreateAssetInput {
   description: String!
   category: String!
   price: Float!
-}
-
-input UpdateAssetInput {
-  imageUrl: String
-  title: String
-  description: String
-  category: String
-  price: Float
-  id: String!
 }
 
 input RegisterUserInput {

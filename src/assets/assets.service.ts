@@ -1,10 +1,11 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import * as currency from 'currency.js';
+import Role from 'src/auth/enums/role.enum';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { AssetsRepository } from './assets.repository';
 import { CreateAssetInput } from './dto/create-asset.input';
-import { UpdateAssetInput } from './dto/update-asset.input';
 import { AssetEntity } from './entities/asset.entity';
+import { AssetNotFoundException } from './exceptions/asset-not-found.exception';
 
 @Injectable()
 export class AssetsService {
@@ -30,25 +31,19 @@ export class AssetsService {
     });
   }
 
-  async getAssetById(id: string) {
-    const asset = await this.assetRepository.findOne(id, {
+  async getAssetById(assetId: string) {
+    const asset = await this.assetRepository.findOne(assetId, {
       relations: ['owner', 'comments'],
     });
+    if (!asset) throw new AssetNotFoundException(assetId);
     return asset;
   }
   async getAssetAndOwner(assetId: string): Promise<AssetEntity> {
-    return await this.assetRepository.getAssetAndOwner(assetId);
+    const asset = await this.assetRepository.getAssetAndOwner(assetId);
+    if (!asset) throw new AssetNotFoundException(assetId);
+    return asset;
   }
 
-  async updateAsset(updateAssetInput: UpdateAssetInput) {
-    const { id } = updateAssetInput;
-    await this.assetRepository.update(id, updateAssetInput);
-    const updatedPost = await this.assetRepository.findOne(id, {
-      relations: ['owner', 'comments'],
-    });
-
-    return updatedPost;
-  }
   async increaseAssetValue(asset: AssetEntity) {
     const { price, id } = asset;
     // NOTE: Price growth is 10%
@@ -56,11 +51,23 @@ export class AssetsService {
     await this.assetRepository.update(id, { price: newPrice });
   }
 
-  async removeAsset(id: string) {
-    return await this.assetRepository.softDelete(id);
+  async removeAsset(id: string, user: UserEntity) {
+    const asset = await this.assetRepository.findOne({ where: { id } });
+    if (!asset) throw new AssetNotFoundException(id);
+
+    if (asset.ownerId === user.id || user.role === Role.Admin) {
+      await this.assetRepository.softDelete(id);
+      return asset;
+    } else {
+      throw new UnauthorizedException(
+        'You are not authorized to delete this asset',
+      );
+    }
   }
 
   async restoreDeletedAsset(id: string) {
-    return await this.assetRepository.restore(id);
+    const asset = await this.assetRepository.find({ where: { id } });
+    await this.assetRepository.restore(id);
+    if (!asset) throw new AssetNotFoundException(id);
   }
 }
