@@ -19,6 +19,10 @@ export class AssetsService {
     return await this.assetRepository.save(newAsset);
   }
 
+  async transferOwnership(id: string, newOwner: UserEntity) {
+    return await this.assetRepository.update(id, { owner: newOwner });
+  }
+
   async getAssets(): Promise<AssetEntity[]> {
     return await this.assetRepository.find({
       relations: ['owner', 'comments'],
@@ -30,6 +34,9 @@ export class AssetsService {
       relations: ['owner', 'comments'],
     });
     return asset;
+  }
+  async getAssetAndOwner(assetId: string): Promise<AssetEntity> {
+    return await this.assetRepository.getAssetAndOwner(assetId);
   }
 
   async updateAsset(updateAssetInput: UpdateAssetInput) {

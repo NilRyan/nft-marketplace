@@ -1,3 +1,4 @@
+import { UserEntity } from 'src/users/entities/user.entity';
 import { BaseModel } from 'src/common/entities/base.entity';
 import Coin from 'src/users/enums/coin.enum';
 import {
@@ -5,7 +6,6 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
   RelationId,
 } from 'typeorm';
@@ -41,6 +41,20 @@ export class TransactionEntity extends BaseModel {
   @ManyToOne((type) => WalletEntity)
   @JoinColumn()
   sellerWallet: WalletEntity;
+
+  @ManyToOne((type) => UserEntity)
+  @JoinColumn()
+  buyer: UserEntity;
+
+  @RelationId((transaction: TransactionEntity) => transaction.buyer)
+  buyerId: string;
+
+  @ManyToOne((type) => UserEntity)
+  @JoinColumn()
+  seller: UserEntity;
+
+  @RelationId((transaction: TransactionEntity) => transaction.seller)
+  sellerId: string;
 
   @RelationId((transaction: TransactionEntity) => transaction.buyerWallet)
   buyerWalletId: string;

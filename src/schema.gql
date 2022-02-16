@@ -84,8 +84,7 @@ type Query {
   getAllAssets: [Asset!]!
   getAssetById(id: ID!): Asset!
   login(loginInput: LoginInput!): AccessTokenOutput!
-  transactions: [TransactionOutput!]!
-  transaction(id: Int!): TransactionOutput!
+  viewTransactions: [TransactionOutput!]!
 }
 
 input LoginInput {
@@ -105,7 +104,7 @@ type Mutation {
   removeAsset(id: ID!): String!
   restoreDeletedAsset(id: ID!): String!
   register(registerUserInput: RegisterUserInput!): User!
-  createTransaction(createTransactionInput: CreateTransactionInput!): TransactionOutput!
+  buyAsset(assetId: String!): TransactionOutput!
 }
 
 input UpdateUserInput {
@@ -151,9 +150,4 @@ input RegisterUserInput {
   lastName: String!
   email: String!
   password: String!
-}
-
-input CreateTransactionInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
 }

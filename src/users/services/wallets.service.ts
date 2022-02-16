@@ -17,4 +17,12 @@ export class WalletsService {
       relations: ['owner'],
     });
   }
+  // TODO: implement balance logic with currency js
+  async increaseBalance(wallet: UserEntity, amount: number) {
+    return 'Balance increased';
+  }
+
+  async decreaseBalance(wallet: UserEntity, amount: number) {
+    return 'Balance decreased';
+  }
 }
