@@ -22,37 +22,25 @@ export class CommentsResolver {
   }
 
   @Query(() => [Comment])
-  getCommentsForAsset(@Args('assetId', { type: () => String }) assetId: string) {
+  getCommentsForAsset(
+    @Args('assetId', { type: () => String }) assetId: string,
+  ) {
     return this.commentsService.getCommentsForAsset(assetId);
   }
 
   @Mutation(() => Comment)
   async updateComment(
     @Args('updateCommentInput') updateCommentInput: UpdateCommentInput,
-    @GetUser() { id }: UserEntity,
+    @GetUser() user: UserEntity,
   ) {
-    await this.verifyUserIsAuthor(updateCommentInput.id, id);
-    return await this.commentsService.updateComment(updateCommentInput);
+    return await this.commentsService.updateComment(updateCommentInput, user);
   }
 
-  @Mutation(() => String)
-  async removeComment(
-    @Args('id', { type: () => String }) commentId: string,
-    @GetUser() { id }: UserEntity,
+  @Mutation(() => Comment)
+  async deleteComment(
+    @Args('commentId', { type: () => String }) commentId: string,
+    @GetUser() user: UserEntity,
   ) {
-    await this.verifyUserIsAuthor(commentId, id);
-    const deleteResponse = await this.commentsService.removeComment(commentId);
-    if (!deleteResponse) throw new CommentNotFoundException(commentId);
-    return `Comment with id: ${commentId} has been removed`;
-  }
-
-  private async verifyUserIsAuthor(commentId: string, userId: string) {
-    const comment = await this.commentsService.getCommentById(commentId);
-    if (!comment) throw new CommentNotFoundException(commentId);
-    if (comment.authorId !== userId) {
-      throw new UnauthorizedException(
-        `You can't update comment with id: ${commentId}`,
-      );
-    }
+    return await this.commentsService.deleteComment(commentId, user);
   }
 }

@@ -98,7 +98,7 @@ type Mutation {
   restoreDeletedUser(id: String!): String!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
-  removeComment(id: String!): String!
+  deleteComment(commentId: String!): Comment!
   createAsset(createAssetInput: CreateAssetInput!): Asset!
   deleteAsset(id: ID!): Asset!
   restoreDeletedAsset(id: ID!): Asset!

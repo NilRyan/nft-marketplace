@@ -69,5 +69,7 @@ export class AssetsService {
     const asset = await this.assetRepository.find({ where: { id } });
     await this.assetRepository.restore(id);
     if (!asset) throw new AssetNotFoundException(id);
+
+    return asset;
   }
 }

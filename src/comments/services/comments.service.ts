@@ -1,8 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { CommentEntity } from 'src/comments/entities/comment.entity';
+import { UserEntity } from 'src/users/entities/user.entity';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AssetsService } from 'src/assets/assets.service';
 import { UsersService } from 'src/users/services/users.service';
 import { CreateCommentInput } from '../dto/create-comment.input';
 import { UpdateCommentInput } from '../dto/update-comment.input';
+import { CommentNotFoundException } from '../exceptions/comment-not-found.exception';
 import { CommentRepository } from '../repositories/comments.repository';
 
 @Injectable()
@@ -41,8 +44,16 @@ export class CommentsService {
     });
   }
 
-  async updateComment(updateCommentInput: UpdateCommentInput) {
+  async updateComment(
+    updateCommentInput: UpdateCommentInput,
+    user: UserEntity,
+  ) {
     const { id } = updateCommentInput;
+    const comment = await this.commentRepository.findOne(id);
+    if (!comment) throw new CommentNotFoundException(id);
+
+    await this.verifyUserIsAuthor(comment, user.id);
+
     await this.commentRepository.update(id, updateCommentInput);
     const updatedComment = await this.commentRepository.findOne(id, {
       relations: ['author', 'asset'],
@@ -51,7 +62,21 @@ export class CommentsService {
     return updatedComment;
   }
 
-  async removeComment(id: string) {
-    return await this.commentRepository.delete(id);
+  async deleteComment(id: string, user: UserEntity) {
+    const comment = await this.commentRepository.findOne(id);
+
+    this.verifyUserIsAuthor(comment, user.id);
+    if (!comment) throw new CommentNotFoundException(id);
+    await this.commentRepository.delete(id);
+
+    return comment;
+  }
+
+  private verifyUserIsAuthor(comment: CommentEntity, userId: string) {
+    if (comment.authorId !== userId) {
+      throw new UnauthorizedException(
+        `You can't update comment with id: ${comment.id}`,
+      );
+    }
   }
 }
