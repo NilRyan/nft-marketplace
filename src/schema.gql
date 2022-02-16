@@ -28,6 +28,8 @@ type Asset {
   title: String!
   description: String!
   price: String!
+  lastSale: String
+  createdAt: String!
   category: String
   owner: UserProfileOutput!
   ownerId: String!

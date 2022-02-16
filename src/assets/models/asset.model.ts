@@ -20,6 +20,12 @@ export class Asset {
   price: string;
 
   @Field({ nullable: true })
+  lastSale?: string;
+
+  @Field()
+  createdAt: string;
+
+  @Field({ nullable: true })
   category?: string;
 
   @Field((type) => UserProfileOutput)

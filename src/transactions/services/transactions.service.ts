@@ -26,7 +26,7 @@ export class TransactionsService {
       throw new BuyOwnAssetForbiddenException(assetId);
 
     const buyerWallet = await this.walletsService.viewWalletByOwner(buyer);
-    if (buyerWallet.balance < asset.price) {
+    if (+buyerWallet.balance < +asset.price) {
       throw new NotEnoughBalanceException();
     }
     const sellerWallet = await this.walletsService.viewWalletByOwner(

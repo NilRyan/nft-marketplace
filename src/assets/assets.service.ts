@@ -22,7 +22,10 @@ export class AssetsService {
   }
 
   async transferOwnership(id: string, newOwner: UserEntity) {
-    return await this.assetRepository.update(id, { owner: newOwner });
+    return await this.assetRepository.update(id, {
+      owner: newOwner,
+      lastSale: new Date(),
+    });
   }
 
   async getAssets(): Promise<AssetEntity[]> {
