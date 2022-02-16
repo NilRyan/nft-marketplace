@@ -1,10 +1,12 @@
+import { AssetNotFoundException } from './../../assets/exceptions/asset-not-found.exception';
 import { AssetsService } from 'src/assets/assets.service';
 import { WalletsService } from './../../users/services/wallets.service';
 import { TransactionRepository } from './../repositories/transaction.repository';
 import { UserEntity } from 'src/users/entities/user.entity';
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, Logger } from '@nestjs/common';
 import { AssetEntity } from 'src/assets/entities/asset.entity';
 import { WalletEntity } from 'src/users/entities/wallet.entity';
+import { BuyOwnAssetForbiddenException } from 'src/assets/exceptions/buy-asset-forbidden.exception';
 
 @Injectable()
 export class TransactionsService {
@@ -18,9 +20,9 @@ export class TransactionsService {
 
   async buyAsset(assetId: string, buyer: UserEntity) {
     const asset = await this.assetsService.getAssetAndOwner(assetId);
-    if (!asset) throw new Error('Asset does not exist');
+    if (!asset) throw new AssetNotFoundException(assetId);
     if (asset.ownerId === buyer.id) {
-      throw new Error('You cannot buy your own asset');
+      throw new BuyOwnAssetForbiddenException(assetId);
     }
 
     const buyerWallet = await this.walletsService.viewWalletByOwner(buyer);

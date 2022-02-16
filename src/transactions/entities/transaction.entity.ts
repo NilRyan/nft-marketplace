@@ -3,6 +3,7 @@ import { BaseModel } from 'src/common/entities/base.entity';
 import Coin from 'src/users/enums/coin.enum';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -13,7 +14,7 @@ import { WalletEntity } from 'src/users/entities/wallet.entity';
 import { AssetEntity } from 'src/assets/entities/asset.entity';
 
 @Entity('transactions')
-export class TransactionEntity extends BaseModel {
+export class TransactionEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -61,4 +62,7 @@ export class TransactionEntity extends BaseModel {
 
   @RelationId((transaction: TransactionEntity) => transaction.sellerWallet)
   sellerWalletId: string;
+
+  @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
 }
