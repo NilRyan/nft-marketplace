@@ -35,14 +35,6 @@ export class TransactionEntity {
   @RelationId((transaction: TransactionEntity) => transaction.asset)
   assetId: string;
 
-  @ManyToOne((type) => WalletEntity)
-  @JoinColumn()
-  buyerWallet: WalletEntity;
-
-  @ManyToOne((type) => WalletEntity)
-  @JoinColumn()
-  sellerWallet: WalletEntity;
-
   @ManyToOne((type) => UserEntity)
   @JoinColumn()
   buyer: UserEntity;
@@ -56,12 +48,6 @@ export class TransactionEntity {
 
   @RelationId((transaction: TransactionEntity) => transaction.seller)
   sellerId: string;
-
-  @RelationId((transaction: TransactionEntity) => transaction.buyerWallet)
-  buyerWalletId: string;
-
-  @RelationId((transaction: TransactionEntity) => transaction.sellerWallet)
-  sellerWalletId: string;
 
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

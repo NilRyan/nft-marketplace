@@ -33,11 +33,7 @@ export class TransactionsService {
       asset.owner,
     );
 
-    const transaction = this.createTransaction(
-      asset,
-      buyerWallet,
-      sellerWallet,
-    );
+    const transaction = this.createTransaction(asset, buyerWallet);
     await this.walletsService.increaseBalance(buyerWallet, asset.price);
     await this.walletsService.decreaseBalance(sellerWallet, asset.price);
     await this.assetsService.transferOwnership(assetId, buyer);
@@ -66,23 +62,15 @@ export class TransactionsService {
     });
   }
 
-  private createTransaction(
-    asset: AssetEntity,
-    buyerWallet: WalletEntity,
-    sellerWallet: WalletEntity,
-  ) {
+  private createTransaction(asset: AssetEntity, buyerWallet: WalletEntity) {
     const transaction = {
       asset,
-      buyerWallet,
-      sellerWallet,
       buyer: buyerWallet.owner,
       buyerId: buyerWallet.owner.id,
       seller: asset.owner,
       sellerId: asset.ownerId,
       assetId: asset.id,
       amount: asset.price,
-      buyerWalletId: buyerWallet.id,
-      sellerWalletId: sellerWallet.id,
     };
     this.transactionRepository.create(transaction);
     return transaction;
