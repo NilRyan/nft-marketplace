@@ -34,37 +34,22 @@ export class UsersResolver {
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
     @GetUser() user: UserEntity,
   ) {
-    if (user.id !== updateUserInput.id) {
-      throw new UnauthorizedException(
-        `You can't update user with id: ${updateUserInput.id}`,
-      );
-    }
-
-    const updatedUser = await this.usersService.updateUser(updateUserInput);
-    if (!updatedUser) throw new UserNotFoundException(updateUserInput.id);
-
-    return updatedUser;
+    return await this.usersService.updateUser(updateUserInput, user);
   }
 
-  @Mutation(() => String)
-  async removeUser(
-    @Args('id', { type: () => String }) id: string,
+  @Mutation(() => UserProfileOutput)
+  async deleteUser(
+    @Args('userId', { type: () => String }) userId: string,
     @GetUser() user: UserEntity,
   ) {
-    if (user.id !== id || user.role !== Role.Admin) {
-      throw new UnauthorizedException(`You can't delete user with id: ${id}`);
-    }
-    const deleteResponse = await this.usersService.removeUser(id);
-    if (!deleteResponse.affected) throw new UserNotFoundException(id);
-    return `User with id: ${id} has been removed`;
+    return await this.usersService.deleteUser(userId, user);
   }
 
   @UseGuards(RoleGuard(Role.Admin))
-  @Mutation(() => String)
-  async restoreDeletedUser(@Args('id', { type: () => String }) id: string) {
-    const restoreResponse = await this.usersService.restoreDeletedUser(id);
-    if (!restoreResponse.affected) throw new UserNotFoundException(id);
-
-    return `User with id: ${id} has been restored`;
+  @Mutation(() => UserProfileOutput)
+  async restoreDeletedUser(
+    @Args('userId', { type: () => String }) userId: string,
+  ) {
+    return await this.usersService.restoreDeletedUser(userId);
   }
 }

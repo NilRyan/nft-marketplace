@@ -94,8 +94,8 @@ input LoginInput {
 
 type Mutation {
   updateUser(updateUserInput: UpdateUserInput!): UserProfileOutput!
-  removeUser(id: String!): String!
-  restoreDeletedUser(id: String!): String!
+  deleteUser(userId: String!): UserProfileOutput!
+  restoreDeletedUser(userId: String!): UserProfileOutput!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
   deleteComment(commentId: String!): Comment!
@@ -112,7 +112,6 @@ input UpdateUserInput {
   lastName: String
   email: String
   password: String
-  id: String!
 }
 
 input CreateCommentInput {
