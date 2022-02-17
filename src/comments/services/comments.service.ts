@@ -1,8 +1,8 @@
-import { OrderBy } from './../../common/order-by.input';
+import { OrderBy } from '../../common/pagination-filtering/order-by.input';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AssetsService } from 'src/assets/assets.service';
 import { CommentEntity } from 'src/comments/entities/comment.entity';
-import { PaginationArgs } from 'src/common/pagination.args';
+import { PaginationArgs } from 'src/common/pagination-filtering/pagination.args';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { CreateCommentInput } from '../dto/create-comment.input';
 import { UpdateCommentInput } from '../dto/update-comment.input';
@@ -31,10 +31,12 @@ export class CommentsService {
     return this.commentRepository.save(newComment);
   }
 
-  async getCommentsForAsset(assetId: string, pagination: PaginationArgs) {
+  async getPaginatedCommentsForAsset(
+    assetId: string,
+    pagination: PaginationArgs,
+  ) {
     const { limit, offset, orderBy } = pagination;
     const { field, sortOrder } = orderBy as unknown as OrderBy;
-    console.log(field, sortOrder);
     const [comments, count] = await this.commentRepository.findAndCount({
       where: {
         asset: {

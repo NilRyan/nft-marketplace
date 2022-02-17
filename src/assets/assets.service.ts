@@ -1,7 +1,10 @@
+import { PaginatedAssets } from './models/paginated-assets.model';
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import * as currency from 'currency.js';
 import Role from 'src/auth/enums/role.enum';
+import { AssetSearchArgs } from 'src/common/pagination-filtering/asset-search.args';
 import { UserEntity } from 'src/users/entities/user.entity';
+import { ILike } from 'typeorm';
 import { AssetsRepository } from './assets.repository';
 import { CreateAssetInput } from './dto/create-asset.input';
 import { AssetEntity } from './entities/asset.entity';
@@ -16,6 +19,8 @@ export class AssetsService {
     const newAsset = this.assetRepository.create({
       ...createAssetInput,
       owner: user,
+      creator: user,
+      creatorId: user.id,
     });
 
     return await this.assetRepository.save(newAsset);
@@ -28,10 +33,55 @@ export class AssetsService {
     });
   }
 
-  async getAssets(): Promise<AssetEntity[]> {
-    return await this.assetRepository.find({
-      relations: ['owner', 'comments'],
+  async getAssets(assetSearchArgs: AssetSearchArgs) {
+    const { searchTerm, limit, offset, orderBy } = assetSearchArgs;
+    const { field, sortOrder } = orderBy;
+    const [assets, count] = await this.assetRepository.findAndCount({
+      where: [
+        {
+          title: ILike(`%${searchTerm}%`),
+        },
+        {
+          description: ILike(`%${searchTerm}%`),
+        },
+        { category: ILike(`%${searchTerm}%`) },
+        {
+          creator: {
+            username: ILike(`%${searchTerm}%`),
+            firstName: ILike(`%${searchTerm}%`),
+            lastName: ILike(`%${searchTerm}%`),
+          },
+        },
+        {
+          owner: {
+            username: ILike(`%${searchTerm}%`),
+            firstName: ILike(`%${searchTerm}%`),
+            lastName: ILike(`%${searchTerm}%`),
+          },
+        },
+      ],
+      order: {
+        [field]: sortOrder,
+      },
+      skip: offset,
+      take: limit,
+      relations: ['owner', 'creator'],
     });
+    // if (count === 0)
+    //   return {
+    //     assets: [],
+    //     paginationInfo: {
+    //       total: count,
+    //     },
+    //   };
+    return {
+      assets,
+      paginationInfo: {
+        total: count,
+        limit,
+        offset,
+      },
+    };
   }
 
   async getAssetById(assetId: string) {

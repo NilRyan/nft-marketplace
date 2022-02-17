@@ -1,4 +1,5 @@
-import { PaginationArgs } from './../common/pagination.args';
+import { PaginatedAssets } from './models/paginated-assets.model';
+import { PaginationArgs } from '../common/pagination-filtering/pagination.args';
 import { UseGuards } from '@nestjs/common';
 import {
   Args,
@@ -18,6 +19,7 @@ import { CommentsService } from './../comments/services/comments.service';
 import { AssetsService } from './assets.service';
 import { CreateAssetInput } from './dto/create-asset.input';
 import { Asset } from './models/asset.model';
+import { AssetSearchArgs } from 'src/common/pagination-filtering/asset-search.args';
 @UseGuards(GqlAuthGuard)
 @Resolver((of) => Asset)
 export class AssetResolver {
@@ -39,9 +41,9 @@ export class AssetResolver {
     return this.assetsService.createAsset(createAssetInput, user);
   }
 
-  @Query(() => [Asset])
-  getAllAssets() {
-    return this.assetsService.getAssets();
+  @Query(() => PaginatedAssets)
+  async getAllAssets(@Args() args: AssetSearchArgs) {
+    return await this.assetsService.getAssets(args);
   }
 
   @Query(() => Asset)
@@ -51,7 +53,10 @@ export class AssetResolver {
 
   @ResolveField('comments')
   async comments(@Parent() asset: Asset, @Args() args: PaginationArgs) {
-    return await this.commentsService.getCommentsForAsset(asset.id, args);
+    return await this.commentsService.getPaginatedCommentsForAsset(
+      asset.id,
+      args,
+    );
   }
 
   @Mutation(() => Asset)

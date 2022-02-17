@@ -29,6 +29,12 @@ export class Asset {
   @Field({ nullable: true })
   category?: string;
 
+  @Field(() => UserProfileOutput)
+  creator: UserProfileOutput;
+
+  @Field()
+  creatorId: string;
+
   @Field((type) => UserProfileOutput)
   owner: UserProfileOutput;
 

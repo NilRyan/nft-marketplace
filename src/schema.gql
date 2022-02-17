@@ -29,8 +29,8 @@ scalar DateTime
 
 type PaginationInfo {
   total: Float!
-  limit: Float!
-  offset: Float!
+  limit: Float
+  offset: Float
 }
 
 type PaginatedComments {
@@ -47,6 +47,8 @@ type Asset {
   lastSale: String
   createdAt: DateTime!
   category: String
+  creator: UserProfileOutput!
+  creatorId: String!
   owner: UserProfileOutput!
   ownerId: String!
   comments(limit: Float = 10, offset: Float = 0, orderBy: OrderBy = {field: "createdAt", sortOrder: "DESC"}): PaginatedComments
@@ -65,6 +67,11 @@ type User {
   firstName: String!
   lastName: String!
   balance: Float!
+  assets: [Asset!]!
+}
+
+type PaginatedAssets {
+  paginationInfo: PaginationInfo!
   assets: [Asset!]!
 }
 
@@ -103,7 +110,7 @@ type Query {
   viewWallet: WalletOutput!
   getAllUsers: [UserProfileOutput!]!
   getUserProfile(id: String!): UserProfileOutput!
-  getAllAssets: [Asset!]!
+  getAllAssets(limit: Float = 10, offset: Float = 0, orderBy: OrderBy = {field: "createdAt", sortOrder: "DESC"}, searchTerm: String!): PaginatedAssets!
   getAssetById(assetId: ID!): Asset!
   login(loginInput: LoginInput!): AccessTokenOutput!
   viewTransactions: [TransactionOutput!]!

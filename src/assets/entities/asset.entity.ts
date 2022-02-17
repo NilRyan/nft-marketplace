@@ -5,8 +5,10 @@ import {
   Check,
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   RelationId,
 } from 'typeorm';
@@ -37,6 +39,13 @@ export class AssetEntity extends BaseModel {
 
   @ManyToOne((type) => UserEntity, (user) => user.assets)
   owner: UserEntity;
+
+  @ManyToOne(() => UserEntity)
+  @JoinColumn()
+  creator: UserEntity;
+
+  @RelationId((asset: AssetEntity) => asset.creator)
+  creatorId: string;
 
   @RelationId((asset: AssetEntity) => asset.owner)
   ownerId: string;

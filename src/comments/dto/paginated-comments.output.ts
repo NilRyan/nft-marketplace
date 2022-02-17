@@ -1,6 +1,6 @@
 import { Comment } from './../models/comment.model';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { PaginationInfo } from 'src/common/pagination-info.output';
+import { PaginationInfo } from 'src/common/pagination-filtering/pagination-info.output';
 
 @ObjectType()
 export class PaginatedComments {
