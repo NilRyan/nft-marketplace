@@ -13,6 +13,6 @@ export class WalletsResolver {
 
   @Query((returns) => WalletOutput)
   async viewWallet(@GetUser() user: UserEntity) {
-    return await this.walletsService.viewWalletByOwner(user);
+    return await this.walletsService.getWalletByOwner(user);
   }
 }

@@ -33,7 +33,7 @@ export class UsersService {
 
   async getUserById(id: string): Promise<UserEntity> {
     const user = await this.userRepository.findOne(id, {
-      relations: ['assets'],
+      relations: ['wallet'],
     });
 
     return user;

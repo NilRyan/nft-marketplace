@@ -13,7 +13,7 @@ export class WalletsService {
     return await this.walletRepository.createWallet(user);
   }
 
-  async viewWalletByOwner(owner: UserEntity) {
+  async getWalletByOwner(owner: UserEntity) {
     return await this.walletRepository.findOne({
       where: { owner },
       relations: ['owner'],

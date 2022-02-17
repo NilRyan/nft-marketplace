@@ -25,13 +25,14 @@ export class TransactionsService {
     if (asset.ownerId === buyer.id)
       throw new BuyOwnAssetForbiddenException(assetId);
 
-    const buyerWallet = await this.walletsService.viewWalletByOwner(buyer);
+    const buyerWallet = buyer.wallet;
     if (+buyerWallet.balance < +asset.price) {
       throw new NotEnoughBalanceException();
     }
     const sellerWallet = asset.owner.wallet;
 
     const transaction = this.createTransaction(asset, buyerWallet);
+
     await this.walletsService.increaseBalance(sellerWallet, asset.price);
     await this.walletsService.decreaseBalance(buyerWallet, asset.price);
     await this.assetsService.transferOwnership(assetId, buyer);
