@@ -5,13 +5,14 @@ import { GetUser } from 'src/auth/get-user.decorator';
 import { GqlAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
 import RoleGuard from 'src/auth/guards/role.guards';
 import { UserEntity } from 'src/users/entities/user.entity';
+import { CommentsService } from './../comments/services/comments.service';
 import { AssetsService } from './assets.service';
 import { CreateAssetInput } from './dto/create-asset.input';
 import { Asset } from './models/asset.model';
 @UseGuards(GqlAuthGuard)
 @Resolver((of) => Asset)
 export class AssetResolver {
-  constructor(private readonly assetService: AssetsService) {}
+  constructor(private readonly assetsService: AssetsService) {}
 
   /*
     TODO:
@@ -23,17 +24,17 @@ export class AssetResolver {
     @Args('createAssetInput') createAssetInput: CreateAssetInput,
     @GetUser() user: UserEntity,
   ) {
-    return this.assetService.createAsset(createAssetInput, user);
+    return this.assetsService.createAsset(createAssetInput, user);
   }
 
   @Query(() => [Asset])
   getAllAssets() {
-    return this.assetService.getAssets();
+    return this.assetsService.getAssets();
   }
 
   @Query(() => Asset)
   async getAssetById(@Args('id', { type: () => ID }) id: string) {
-    return await this.assetService.getAssetById(id);
+    return await this.assetsService.getAssetById(id);
   }
 
   @Mutation(() => Asset)
@@ -41,12 +42,12 @@ export class AssetResolver {
     @Args('id', { type: () => ID }) assetId: string,
     @GetUser() user: UserEntity,
   ) {
-    return await this.assetService.removeAsset(assetId, user);
+    return await this.assetsService.removeAsset(assetId, user);
   }
 
   @UseGuards(RoleGuard(Role.Admin))
   @Mutation(() => Asset)
   async restoreDeletedAsset(@Args('id', { type: () => ID }) id: string) {
-    return await this.assetService.restoreDeletedAsset(id);
+    return await this.assetsService.restoreDeletedAsset(id);
   }
 }

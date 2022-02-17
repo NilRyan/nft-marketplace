@@ -7,7 +7,4 @@ export class CreateCommentInput {
 
   @Field()
   assetId: string;
-
-  @Field()
-  authorId: string;
 }

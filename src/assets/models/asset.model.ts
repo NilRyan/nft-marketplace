@@ -1,3 +1,4 @@
+import { PaginatedComments } from './../../comments/dto/paginated-comments.output';
 import { UserProfileOutput } from '../../users/dto/user-profile.output';
 import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
 import { Comment } from 'src/comments/models/comment.model';
@@ -34,6 +35,6 @@ export class Asset {
   @Field()
   ownerId: string;
 
-  @Field((type) => [Comment], { nullable: true })
-  comments?: Comment[];
+  @Field((type) => PaginatedComments, { nullable: true })
+  comments?: PaginatedComments;
 }

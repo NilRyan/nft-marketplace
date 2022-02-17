@@ -17,5 +17,6 @@ import { AssetsService } from 'src/assets/assets.service';
     AssetsModule,
   ],
   providers: [CommentsResolver, CommentsService, UsersService, AssetsService],
+  exports: [CommentsService],
 })
 export class CommentsModule {}

@@ -7,19 +7,22 @@ import { CreateCommentInput } from '../dto/create-comment.input';
 import { UpdateCommentInput } from '../dto/update-comment.input';
 import { CommentNotFoundException } from '../exceptions/comment-not-found.exception';
 import { CommentRepository } from '../repositories/comments.repository';
+import { PaginationParams } from 'src/common/pagination-params.input';
 
 @Injectable()
 export class CommentsService {
   constructor(
     private readonly commentRepository: CommentRepository,
-    private readonly usersService: UsersService,
     private readonly assetsService: AssetsService,
   ) {}
 
-  async createComment(createCommentInput: CreateCommentInput) {
-    const { authorId, assetId } = createCommentInput;
-    const author = await this.usersService.getUserById(authorId);
-    const asset = await this.assetsService.getAssetById(assetId);
+  async createComment(
+    createCommentInput: CreateCommentInput,
+    author: UserEntity,
+  ) {
+    const asset = await this.assetsService.getAssetById(
+      createCommentInput.assetId,
+    );
     const newComment = this.commentRepository.create({
       ...createCommentInput,
       author,
@@ -28,14 +31,34 @@ export class CommentsService {
     return this.commentRepository.save(newComment);
   }
 
-  async getCommentsForAsset(assetId: string) {
-    return await this.commentRepository.find({
+  async getCommentsForAsset(assetId: string, pagination: PaginationParams) {
+    const { limit, offset } = pagination;
+    const asset = await this.assetsService.getAssetById(assetId);
+    console.log(asset);
+    const [comments, count] = await this.commentRepository.findAndCount({
       where: {
         asset: {
           id: assetId,
         },
       },
+      order: {
+        createdAt: 'DESC',
+      },
+      skip: offset,
+      take: limit,
     });
+
+    return {
+      ...asset,
+      comments: {
+        comments,
+        paginationInfo: {
+          total: count,
+          limit,
+          offset,
+        },
+      },
+    };
   }
 
   async getCommentById(commentId: string) {

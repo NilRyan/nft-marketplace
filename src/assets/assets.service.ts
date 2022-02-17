@@ -36,7 +36,7 @@ export class AssetsService {
 
   async getAssetById(assetId: string) {
     const asset = await this.assetRepository.findOne(assetId, {
-      relations: ['owner', 'comments'],
+      relations: ['owner'],
     });
     if (!asset) throw new AssetNotFoundException(assetId);
     return asset;
