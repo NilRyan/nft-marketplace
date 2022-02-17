@@ -29,9 +29,7 @@ export class TransactionsService {
     if (+buyerWallet.balance < +asset.price) {
       throw new NotEnoughBalanceException();
     }
-    const sellerWallet = await this.walletsService.viewWalletByOwner(
-      asset.owner,
-    );
+    const sellerWallet = asset.owner.wallet;
 
     const transaction = this.createTransaction(asset, buyerWallet);
     await this.walletsService.increaseBalance(buyerWallet, asset.price);
@@ -51,14 +49,7 @@ export class TransactionsService {
         },
         { seller: user },
       ],
-      relations: [
-        'asset',
-        'buyerWallet',
-        'sellerWallet',
-        'buyer',
-        'seller',
-        'asset.owner',
-      ],
+      relations: ['asset', 'buyer', 'seller', 'asset.owner'],
     });
   }
 

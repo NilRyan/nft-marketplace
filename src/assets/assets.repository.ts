@@ -5,7 +5,7 @@ import { AssetEntity } from './entities/asset.entity';
 export class AssetsRepository extends Repository<AssetEntity> {
   async getAssetAndOwner(assetId: string): Promise<AssetEntity> {
     return await this.findOne(assetId, {
-      relations: ['owner'],
+      relations: ['owner', 'owner.wallet'],
     });
   }
 }
