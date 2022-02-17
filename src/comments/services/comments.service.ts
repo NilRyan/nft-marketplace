@@ -1,3 +1,4 @@
+import { OrderBy } from './../../common/order-by.input';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AssetsService } from 'src/assets/assets.service';
 import { CommentEntity } from 'src/comments/entities/comment.entity';
@@ -32,6 +33,8 @@ export class CommentsService {
 
   async getCommentsForAsset(assetId: string, pagination: PaginationArgs) {
     const { limit, offset, orderBy } = pagination;
+    const { field, sortOrder } = orderBy as unknown as OrderBy;
+    console.log(field, sortOrder);
     const [comments, count] = await this.commentRepository.findAndCount({
       where: {
         asset: {
@@ -39,7 +42,7 @@ export class CommentsService {
         },
       },
       order: {
-        [orderBy]: 'DESC',
+        [field]: sortOrder,
       },
       skip: offset,
       take: limit,

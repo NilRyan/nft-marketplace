@@ -49,7 +49,12 @@ type Asset {
   category: String
   owner: UserProfileOutput!
   ownerId: String!
-  comments(limit: Float = 10, offset: Float = 0, orderBy: String = "createdAt"): PaginatedComments
+  comments(limit: Float = 10, offset: Float = 0, orderBy: OrderBy = {field: "createdAt", sortOrder: "DESC"}): PaginatedComments
+}
+
+input OrderBy {
+  field: String = "createdAt"
+  sortOrder: String = "DESC"
 }
 
 type User {
