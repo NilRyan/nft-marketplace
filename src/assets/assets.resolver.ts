@@ -1,5 +1,14 @@
+import { PaginationArgs } from './../common/pagination.args';
 import { UseGuards } from '@nestjs/common';
-import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  ID,
+  Mutation,
+  Query,
+  Resolver,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import Role from 'src/auth/enums/role.enum';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { GqlAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
@@ -12,7 +21,10 @@ import { Asset } from './models/asset.model';
 @UseGuards(GqlAuthGuard)
 @Resolver((of) => Asset)
 export class AssetResolver {
-  constructor(private readonly assetsService: AssetsService) {}
+  constructor(
+    private readonly assetsService: AssetsService,
+    private readonly commentsService: CommentsService,
+  ) {}
 
   /*
     TODO:
@@ -33,8 +45,13 @@ export class AssetResolver {
   }
 
   @Query(() => Asset)
-  async getAssetById(@Args('id', { type: () => ID }) id: string) {
-    return await this.assetsService.getAssetById(id);
+  async getAssetById(@Args('assetId', { type: () => ID }) assetId: string) {
+    return await this.assetsService.getAssetById(assetId);
+  }
+
+  @ResolveField('comments')
+  async comments(@Parent() asset: Asset, @Args() args: PaginationArgs) {
+    return await this.commentsService.getCommentsForAsset(asset.id, args);
   }
 
   @Mutation(() => Asset)

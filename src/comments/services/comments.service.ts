@@ -1,13 +1,12 @@
-import { CommentEntity } from 'src/comments/entities/comment.entity';
-import { UserEntity } from 'src/users/entities/user.entity';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AssetsService } from 'src/assets/assets.service';
-import { UsersService } from 'src/users/services/users.service';
+import { CommentEntity } from 'src/comments/entities/comment.entity';
+import { PaginationArgs } from 'src/common/pagination.args';
+import { UserEntity } from 'src/users/entities/user.entity';
 import { CreateCommentInput } from '../dto/create-comment.input';
 import { UpdateCommentInput } from '../dto/update-comment.input';
 import { CommentNotFoundException } from '../exceptions/comment-not-found.exception';
 import { CommentRepository } from '../repositories/comments.repository';
-import { PaginationParams } from 'src/common/pagination-params.input';
 
 @Injectable()
 export class CommentsService {
@@ -31,10 +30,8 @@ export class CommentsService {
     return this.commentRepository.save(newComment);
   }
 
-  async getCommentsForAsset(assetId: string, pagination: PaginationParams) {
-    const { limit, offset } = pagination;
-    const asset = await this.assetsService.getAssetById(assetId);
-    console.log(asset);
+  async getCommentsForAsset(assetId: string, pagination: PaginationArgs) {
+    const { limit, offset, orderBy } = pagination;
     const [comments, count] = await this.commentRepository.findAndCount({
       where: {
         asset: {
@@ -42,21 +39,18 @@ export class CommentsService {
         },
       },
       order: {
-        createdAt: 'DESC',
+        [orderBy]: 'DESC',
       },
       skip: offset,
       take: limit,
     });
 
     return {
-      ...asset,
-      comments: {
-        comments,
-        paginationInfo: {
-          total: count,
-          limit,
-          offset,
-        },
+      comments,
+      paginationInfo: {
+        total: count,
+        limit,
+        offset,
       },
     };
   }

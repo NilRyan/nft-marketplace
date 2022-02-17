@@ -1,5 +1,5 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 
 import { CommentsResolver } from './resolvers/comments.resolver';
 import { CommentRepository } from './repositories/comments.repository';
@@ -14,9 +14,9 @@ import { AssetsService } from 'src/assets/assets.service';
   imports: [
     TypeOrmModule.forFeature([CommentRepository, AssetsRepository]),
     UsersModule,
-    AssetsModule,
+    forwardRef(() => AssetsModule),
   ],
   providers: [CommentsResolver, CommentsService, UsersService, AssetsService],
-  exports: [CommentsService],
+  exports: [CommentsService, TypeOrmModule.forFeature([CommentRepository])],
 })
 export class CommentsModule {}

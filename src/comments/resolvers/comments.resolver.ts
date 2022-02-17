@@ -3,7 +3,6 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { GqlAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
-import { PaginationParams } from 'src/common/pagination-params.input';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { CreateCommentInput } from '../dto/create-comment.input';
 import { UpdateCommentInput } from '../dto/update-comment.input';
@@ -21,15 +20,6 @@ export class CommentsResolver {
     @GetUser() user: UserEntity,
   ) {
     return this.commentsService.createComment(createCommentInput, user);
-  }
-
-  @Query(() => Asset)
-  async getAssetAndComments(
-    @Args('assetId', { type: () => String }) assetId: string,
-    @Args('pagination', { type: () => PaginationParams })
-    pagination: PaginationParams,
-  ) {
-    return await this.commentsService.getCommentsForAsset(assetId, pagination);
   }
 
   @Mutation(() => Comment)
