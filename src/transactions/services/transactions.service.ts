@@ -32,8 +32,8 @@ export class TransactionsService {
     const sellerWallet = asset.owner.wallet;
 
     const transaction = this.createTransaction(asset, buyerWallet);
-    await this.walletsService.increaseBalance(buyerWallet, asset.price);
-    await this.walletsService.decreaseBalance(sellerWallet, asset.price);
+    await this.walletsService.increaseBalance(sellerWallet, asset.price);
+    await this.walletsService.decreaseBalance(buyerWallet, asset.price);
     await this.assetsService.transferOwnership(assetId, buyer);
     await this.assetsService.increaseAssetValue(asset);
     await this.transactionRepository.save(transaction);
