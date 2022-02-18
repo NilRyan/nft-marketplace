@@ -5,14 +5,14 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
-import got from 'got';
-import { fileTypeFromStream } from 'file-type';
+import { fromStream } from 'file-type';
+import got from 'got-cjs';
 
 @ValidatorConstraint({ async: true })
 export class IsImageUrlConstraint implements ValidatorConstraintInterface {
   async validate(imageUrl: string, args: ValidationArguments) {
     const stream = got.stream(imageUrl);
-    const fileType = await fileTypeFromStream(stream);
+    const fileType = await fromStream(stream);
     const isImage = fileType.mime.substring(0, 5) === 'image';
     return isImage;
   }
