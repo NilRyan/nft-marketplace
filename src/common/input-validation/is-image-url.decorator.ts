@@ -16,9 +16,12 @@ export class IsImageUrlConstraint implements ValidatorConstraintInterface {
     const isImage = fileType.mime.substring(0, 5) === 'image';
     return isImage;
   }
+  defaultMessage(validationArguments?: ValidationArguments): string {
+    return 'Must be a valid Image URL';
+  }
 }
 
-export function IsImageUrl(validationOptions: ValidationOptions) {
+export function IsImageUrl(validationOptions?: ValidationOptions) {
   // eslint-disable-next-line @typescript-eslint/ban-types
   return function (object: Object, propertyName: string) {
     registerDecorator({

@@ -1,3 +1,4 @@
+import { IsImageUrl } from 'src/common/input-validation/is-image-url.decorator';
 import { Field, InputType } from '@nestjs/graphql';
 import { IsAlphanumeric, IsNumber, IsPositive, Length } from 'class-validator';
 
@@ -5,6 +6,7 @@ import { IsAlphanumeric, IsNumber, IsPositive, Length } from 'class-validator';
 export class CreateAssetInput {
   // TODO: Create custom validator for image-url, use library like file-type
   @Field()
+  @IsImageUrl()
   readonly imageUrl: string;
   @IsAlphanumeric()
   @Field()
