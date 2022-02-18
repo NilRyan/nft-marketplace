@@ -12,13 +12,13 @@ import got from 'got-cjs';
 @ValidatorConstraint({ async: true })
 export class IsImageUrlConstraint implements ValidatorConstraintInterface {
   async validate(imageUrl: string, args: ValidationArguments) {
-    if (!isURL(imageUrl)) return false;
-
-    const stream = got.stream(imageUrl, { throwHttpErrors: false });
-    console.log(stream);
-    const fileType = await fromStream(stream);
-    if (fileType?.mime.startsWith('image/')) return true;
-    return false;
+    try {
+      const stream = got.stream(imageUrl);
+      const fileType = await fromStream(stream);
+      return fileType.mime.startsWith('image/');
+    } catch (err) {
+      return false;
+    }
   }
   defaultMessage(validationArguments?: ValidationArguments): string {
     return 'Must be a valid Image URL';

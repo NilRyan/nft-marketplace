@@ -25,6 +25,7 @@ bootstrap();
 2. Unit tests
 3. DataLoader
 4. Caching
+5. Index postgres
 */
 
 /*
