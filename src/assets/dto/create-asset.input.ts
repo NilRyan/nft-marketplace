@@ -13,7 +13,6 @@ export class CreateAssetInput {
   // TODO: Create custom validator for image-url, use library like file-type
   @Field()
   @IsImageUrl({ message: 'Must be a valid Image URL' })
-  @IsUrl()
   readonly imageUrl: string;
   @IsAlphanumeric()
   @Field()
