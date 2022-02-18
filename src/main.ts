@@ -20,6 +20,13 @@ async function bootstrap() {
   await app.listen(3000);
 }
 bootstrap();
+/* TODO: Important
+1. Enable atomicity with query runner, add missing entity fields for user
+2. Unit tests
+3. DataLoader
+4. Caching
+*/
+
 /*
   Registration - need to complete details but mostly done
     - Users must be able to register an account using email/username and password and other info
