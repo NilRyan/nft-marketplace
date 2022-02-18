@@ -1,5 +1,4 @@
 import {
-  isURL,
   registerDecorator,
   ValidationArguments,
   ValidationOptions,

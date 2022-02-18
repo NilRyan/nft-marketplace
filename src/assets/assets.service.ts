@@ -37,27 +37,15 @@ export class AssetsService {
     const { field, sortOrder } = orderBy;
     const [assets, count] = await this.assetRepository.findAndCount({
       where: [
-        {
-          title: ILike(`%${searchTerm}%`),
-        },
-        {
-          description: ILike(`%${searchTerm}%`),
-        },
+        { title: ILike(`%${searchTerm}%`) },
+        { description: ILike(`%${searchTerm}%`) },
         { category: ILike(`%${searchTerm}%`) },
-        {
-          creator: {
-            username: ILike(`%${searchTerm}%`),
-            firstName: ILike(`%${searchTerm}%`),
-            lastName: ILike(`%${searchTerm}%`),
-          },
-        },
-        {
-          owner: {
-            username: ILike(`%${searchTerm}%`),
-            firstName: ILike(`%${searchTerm}%`),
-            lastName: ILike(`%${searchTerm}%`),
-          },
-        },
+        { creator: { username: ILike(`%${searchTerm}%`) } },
+        { creator: { firstName: ILike(`%${searchTerm}%`) } },
+        { creator: { lastName: ILike(`%${searchTerm}%`) } },
+        { owner: { username: ILike(`%${searchTerm}%`) } },
+        { owner: { firstName: ILike(`%${searchTerm}%`) } },
+        { owner: { lastName: ILike(`%${searchTerm}%`) } },
       ],
       order: {
         [field]: sortOrder,
