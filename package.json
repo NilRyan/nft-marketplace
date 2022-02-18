@@ -38,6 +38,7 @@
     "currency.js": "^2.0.4",
     "graphql": "^15.8.0",
     "graphql-tools": "^8.2.0",
+    "helmet": "^5.0.2",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
