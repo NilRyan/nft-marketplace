@@ -1,4 +1,3 @@
-import { PaginatedAssets } from './models/paginated-assets.model';
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import * as currency from 'currency.js';
 import Role from 'src/auth/enums/role.enum';

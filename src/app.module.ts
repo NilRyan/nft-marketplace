@@ -15,14 +15,14 @@ import { AssetsModule } from './assets/assets.module';
     1. Add PostgreSQL and TypeORM // done
     2. Setup domain and model entities // initial done
     3. Setup basic crud - modfiy BaseEntity to BaseModel // initial done
-      - add currency js for monetary values (floating point arithmetic issues)
-      - accountStatus enum "Approved", "Disabled"
-    4. Add error handling and validation
+      - add currency js for monetary values (floating point arithmetic issues) - done
+      - accountStatus enum "Approved", "Disabled" - hmm
+    4. Add error handling and validation - needs improvement
     5. Enable searching filtering and pagination
 
   
-    5. Add authentication with JWT passport
-    6. Add role based authorization
+    5. Add authentication with JWT passport -done
+    6. Add role based authorization -done
     7. Dataloader for N+1 queries
     8. Add caching? 
     9. DB migrations and seeding -- generate mockdata somewhere
