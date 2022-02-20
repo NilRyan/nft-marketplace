@@ -8,6 +8,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { AssetEntity } from 'src/assets/entities/asset.entity';
 import { WalletEntity } from 'src/users/entities/wallet.entity';
 import { BuyOwnAssetForbiddenException } from 'src/assets/exceptions/buy-asset-forbidden.exception';
+import { Connection } from 'typeorm';
 
 @Injectable()
 export class TransactionsService {
@@ -17,6 +18,7 @@ export class TransactionsService {
     private readonly transactionRepository: TransactionRepository,
     private readonly walletsService: WalletsService,
     private readonly assetsService: AssetsService,
+    private connection: Connection,
   ) {}
 
   async buyAsset(assetId: string, buyer: UserEntity) {
@@ -31,15 +33,40 @@ export class TransactionsService {
     }
     const sellerWallet = asset.owner.wallet;
 
-    const transaction = this.createTransaction(asset, buyerWallet);
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const transaction = this.createTransaction(asset, buyerWallet);
 
-    await this.walletsService.increaseBalance(sellerWallet, asset.price);
-    await this.walletsService.decreaseBalance(buyerWallet, asset.price);
-    await this.assetsService.transferOwnership(assetId, buyer);
-    await this.assetsService.increaseAssetValue(asset);
-    await this.transactionRepository.save(transaction);
+      const increasedSellerWallet = await this.walletsService.increaseBalance(
+        sellerWallet,
+        asset.price,
+      );
+      await queryRunner.manager.save(increasedSellerWallet);
 
-    return transaction;
+      const decreasedBuyerWallet = await this.walletsService.decreaseBalance(
+        buyerWallet,
+        asset.price,
+      );
+      await queryRunner.manager.save(decreasedBuyerWallet);
+      await queryRunner.manager.save(assetId, {
+        owner: buyer,
+        ownerId: buyer.id,
+        lastSale: new Date(),
+      });
+      const assetWithValueIncrease =
+        await this.assetsService.increaseAssetValue(asset);
+      await queryRunner.manager.save(assetWithValueIncrease);
+      await queryRunner.manager.save(transaction);
+      await queryRunner.commitTransaction();
+      return transaction;
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      throw new Error(err);
+    } finally {
+      queryRunner.release();
+    }
   }
 
   async viewTransactions(user: UserEntity) {

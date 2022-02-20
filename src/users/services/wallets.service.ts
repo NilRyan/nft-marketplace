@@ -20,21 +20,22 @@ export class WalletsService {
     });
   }
   // TODO: implement balance logic with currency js
-  async increaseBalance(wallet: WalletEntity, amount: number) {
+  async increaseBalance(
+    wallet: WalletEntity,
+    amount: number,
+  ): Promise<WalletEntity> {
     const increasedBalance = currency(wallet.balance, { precision: 8 }).add(
       amount,
     ).value;
-    await this.walletRepository.update(wallet.id, {
-      balance: increasedBalance,
-    });
+    wallet.balance = increasedBalance;
+    return wallet;
   }
 
   async decreaseBalance(wallet: WalletEntity, amount: number) {
     const decreasedBalance = currency(wallet.balance, {
       precision: 8,
     }).subtract(amount).value;
-    await this.walletRepository.update(wallet.id, {
-      balance: decreasedBalance,
-    });
+    wallet.balance = decreasedBalance;
+    return wallet;
   }
 }

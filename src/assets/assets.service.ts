@@ -25,12 +25,12 @@ export class AssetsService {
     return await this.assetRepository.save(newAsset);
   }
 
-  async transferOwnership(id: string, newOwner: UserEntity) {
-    return await this.assetRepository.update(id, {
-      owner: newOwner,
-      lastSale: new Date(),
-    });
-  }
+  // async transferOwnership(id: string, newOwner: UserEntity) {
+  //   return await this.assetRepository.update(id, {
+  //     owner: newOwner,
+  //     lastSale: new Date(),
+  //   });
+  // }
 
   async getAssets(assetSearchArgs: AssetSearchArgs) {
     const { searchTerm, limit, offset, orderBy } = assetSearchArgs;
@@ -85,10 +85,11 @@ export class AssetsService {
   }
 
   async increaseAssetValue(asset: AssetEntity) {
-    const { price, id } = asset;
+    const { price } = asset;
     // NOTE: Price growth is 10%
     const newPrice = currency(price, { precision: 8 }).multiply(1.1).value;
-    await this.assetRepository.update(id, { price: newPrice });
+    asset.price = newPrice;
+    return asset;
   }
 
   async removeAsset(id: string, user: UserEntity) {
