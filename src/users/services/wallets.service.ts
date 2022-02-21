@@ -31,7 +31,10 @@ export class WalletsService {
     return wallet;
   }
 
-  async decreaseBalance(wallet: WalletEntity, amount: number) {
+  async decreaseBalance(
+    wallet: WalletEntity,
+    amount: number,
+  ): Promise<WalletEntity> {
     const decreasedBalance = currency(wallet.balance, {
       precision: 8,
     }).subtract(amount).value;

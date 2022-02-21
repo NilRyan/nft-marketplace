@@ -1,3 +1,4 @@
+import { TransactionEntity } from './../entities/transaction.entity';
 import { NotEnoughBalanceException } from './../../users/exceptions/not-enough-balance.exception';
 import { AssetNotFoundException } from './../../assets/exceptions/asset-not-found.exception';
 import { AssetsService } from 'src/assets/assets.service';
@@ -6,7 +7,6 @@ import { TransactionRepository } from './../repositories/transaction.repository'
 import { UserEntity } from 'src/users/entities/user.entity';
 import { Injectable, Logger } from '@nestjs/common';
 import { AssetEntity } from 'src/assets/entities/asset.entity';
-import { WalletEntity } from 'src/users/entities/wallet.entity';
 import { BuyOwnAssetForbiddenException } from 'src/assets/exceptions/buy-asset-forbidden.exception';
 import { Connection } from 'typeorm';
 
@@ -24,43 +24,32 @@ export class TransactionsService {
   async buyAsset(assetId: string, buyer: UserEntity) {
     const asset = await this.assetsService.getAssetAndOwner(assetId);
     if (!asset) throw new AssetNotFoundException(assetId);
-    if (asset.ownerId === buyer.id)
+    if (asset.ownerId === buyer.id) {
       throw new BuyOwnAssetForbiddenException(assetId);
-
-    const buyerWallet = buyer.wallet;
-    if (+buyerWallet.balance < +asset.price) {
+    }
+    if (+buyer.wallet.balance < +asset.price) {
       throw new NotEnoughBalanceException();
     }
-    const sellerWallet = asset.owner.wallet;
-
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const transaction = this.createTransaction(asset, buyerWallet);
-
-      const increasedSellerWallet = await this.walletsService.increaseBalance(
-        sellerWallet,
-        asset.price,
+      const { id } = await queryRunner.manager.save(
+        this.createBuyTransactionEntity(asset, buyer),
       );
-      await queryRunner.manager.save(increasedSellerWallet);
-
-      const decreasedBuyerWallet = await this.walletsService.decreaseBalance(
-        buyerWallet,
-        asset.price,
-      );
-      await queryRunner.manager.save(decreasedBuyerWallet);
-      await queryRunner.manager.save(assetId, {
-        owner: buyer,
-        ownerId: buyer.id,
-        lastSale: new Date(),
-      });
-      const assetWithValueIncrease =
-        await this.assetsService.increaseAssetValue(asset);
-      await queryRunner.manager.save(assetWithValueIncrease);
-      await queryRunner.manager.save(transaction);
+      await queryRunner.manager.save(
+        await Promise.all([
+          this.walletsService.increaseBalance(asset.owner.wallet, asset.price),
+          this.walletsService.decreaseBalance(buyer.wallet, asset.price),
+          this.assetsService.transferOwnership(asset, buyer),
+          this.assetsService.increaseAssetValue(asset),
+        ]),
+      ); 
       await queryRunner.commitTransaction();
-      return transaction;
+
+      return this.transactionRepository.findOne(id, {
+        relations: ['asset', 'buyer', 'seller', 'asset.owner'],
+      });
     } catch (err) {
       await queryRunner.rollbackTransaction();
       throw new Error(err);
@@ -81,17 +70,16 @@ export class TransactionsService {
     });
   }
 
-  private createTransaction(asset: AssetEntity, buyerWallet: WalletEntity) {
+  private createBuyTransactionEntity(asset: AssetEntity, buyer: UserEntity) {
     const transaction = {
       asset,
-      buyer: buyerWallet.owner,
-      buyerId: buyerWallet.owner.id,
+      buyer,
+      buyerId: buyer.id,
       seller: asset.owner,
       sellerId: asset.ownerId,
       assetId: asset.id,
       amount: asset.price,
     };
-    this.transactionRepository.create(transaction);
-    return transaction;
+    return this.transactionRepository.create(transaction);
   }
 }

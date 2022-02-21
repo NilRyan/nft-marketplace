@@ -25,12 +25,15 @@ export class AssetsService {
     return await this.assetRepository.save(newAsset);
   }
 
-  // async transferOwnership(id: string, newOwner: UserEntity) {
-  //   return await this.assetRepository.update(id, {
-  //     owner: newOwner,
-  //     lastSale: new Date(),
-  //   });
-  // }
+  async transferOwnership(
+    asset: AssetEntity,
+    newOwner: UserEntity,
+  ): Promise<AssetEntity> {
+    asset.owner = newOwner;
+    asset.ownerId = newOwner.id;
+    asset.lastSale = new Date();
+    return asset;
+  }
 
   async getAssets(assetSearchArgs: AssetSearchArgs) {
     const { searchTerm, limit, offset, orderBy } = assetSearchArgs;
