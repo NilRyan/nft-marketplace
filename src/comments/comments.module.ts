@@ -3,12 +3,13 @@ import { forwardRef, Module } from '@nestjs/common';
 
 import { CommentsResolver } from './resolvers/comments.resolver';
 import { CommentRepository } from './repositories/comments.repository';
-import { UsersModule } from 'src/users/users.module';
-import { UsersService } from 'src/users/services/users.service';
+import { AssetsModule } from '../assets/assets.module';
+import { AssetsRepository } from '../assets/assets.repository';
+import { AssetsService } from '../assets/assets.service';
+import { UsersService } from '../users/services/users.service';
+import { UsersModule } from '../users/users.module';
 import { CommentsService } from './services/comments.service';
-import { AssetsModule } from 'src/assets/assets.module';
-import { AssetsRepository } from 'src/assets/assets.repository';
-import { AssetsService } from 'src/assets/assets.service';
+
 
 @Module({
   imports: [

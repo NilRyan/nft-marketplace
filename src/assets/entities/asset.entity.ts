@@ -1,6 +1,3 @@
-import { CommentEntity } from 'src/comments/entities/comment.entity';
-import { BaseModel } from 'src/common/entities/base.entity';
-import { UserEntity } from 'src/users/entities/user.entity';
 import {
   Check,
   Column,
@@ -12,6 +9,9 @@ import {
   PrimaryGeneratedColumn,
   RelationId,
 } from 'typeorm';
+import { CommentEntity } from '../../comments/entities/comment.entity';
+import { BaseModel } from '../../common/entities/base.entity';
+import { UserEntity } from '../../users/entities/user.entity';
 
 @Entity('asset')
 @Check('"price" >= 0')

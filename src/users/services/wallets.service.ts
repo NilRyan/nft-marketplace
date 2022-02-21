@@ -1,8 +1,8 @@
-import { UserEntity } from 'src/users/entities/user.entity';
 import { WalletRepository } from './../repositories/wallets.repository';
 import { Injectable, Logger } from '@nestjs/common';
 import { WalletEntity } from '../entities/wallet.entity';
 import * as currency from 'currency.js';
+import { UserEntity } from '../entities/user.entity';
 
 @Injectable()
 export class WalletsService {

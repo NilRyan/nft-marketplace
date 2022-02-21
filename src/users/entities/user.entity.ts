@@ -1,8 +1,4 @@
-import { ResolveField } from '@nestjs/graphql';
 import { Exclude } from 'class-transformer';
-import { AssetEntity } from 'src/assets/entities/asset.entity';
-import Role from 'src/auth/enums/role.enum';
-import { BaseModel } from 'src/common/entities/base.entity';
 import {
   Column,
   Entity,
@@ -12,6 +8,9 @@ import {
   PrimaryGeneratedColumn,
   RelationId,
 } from 'typeorm';
+import { AssetEntity } from '../../assets/entities/asset.entity';
+import Role from '../../auth/enums/role.enum';
+import { BaseModel } from '../../common/entities/base.entity';
 import { WalletEntity } from './wallet.entity';
 
 @Entity('users')

@@ -1,10 +1,10 @@
-import { CommentsService } from 'src/comments/services/comments.service';
 import { CommentsModule } from './../comments/comments.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { forwardRef, Module } from '@nestjs/common';
 import { AssetResolver } from './assets.resolver';
 import { AssetsRepository } from './assets.repository';
 import { AssetsService } from './assets.service';
+import { CommentsService } from '../comments/services/comments.service';
 
 @Module({
   imports: [

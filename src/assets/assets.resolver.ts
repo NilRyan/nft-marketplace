@@ -10,16 +10,17 @@ import {
   ResolveField,
   Parent,
 } from '@nestjs/graphql';
-import Role from 'src/auth/enums/role.enum';
-import { GetUser } from 'src/auth/get-user.decorator';
-import { GqlAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
-import RoleGuard from 'src/auth/guards/role.guards';
-import { UserEntity } from 'src/users/entities/user.entity';
+
 import { CommentsService } from './../comments/services/comments.service';
 import { AssetsService } from './assets.service';
 import { CreateAssetInput } from './dto/create-asset.input';
 import { Asset } from './models/asset.model';
-import { AssetSearchArgs } from 'src/common/pagination-filtering/asset-search.args';
+import Role from '../auth/enums/role.enum';
+import { GetUser } from '../auth/get-user.decorator';
+import { GqlAuthGuard } from '../auth/guards/graphql-jwt-auth.guard';
+import RoleGuard from '../auth/guards/role.guards';
+import { AssetSearchArgs } from '../common/pagination-filtering/asset-search.args';
+import { UserEntity } from '../users/entities/user.entity';
 @UseGuards(GqlAuthGuard)
 @Resolver((of) => Asset)
 export class AssetResolver {

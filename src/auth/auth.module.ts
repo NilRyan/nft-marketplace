@@ -3,11 +3,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
-import { UsersRepository } from 'src/users/repositories/users.repository';
-import { UsersModule } from 'src/users/users.module';
+
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt-strategy';
+import { UsersRepository } from '../users/repositories/users.repository';
+import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [

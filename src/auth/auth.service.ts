@@ -9,9 +9,9 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { RegisterUserInput } from './dto/register-user.input';
 import * as bcrypt from 'bcrypt';
-import PostgresErrorCode from 'src/database/postgres-error-code.enum';
 import { ConfigService } from '@nestjs/config';
-import { UsersService } from 'src/users/services/users.service';
+import PostgresErrorCode from '../database/postgres-error-code.enum';
+import { UsersService } from '../users/services/users.service';
 @Injectable()
 export class AuthService {
   constructor(

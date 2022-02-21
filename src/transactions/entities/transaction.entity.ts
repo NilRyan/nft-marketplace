@@ -1,6 +1,3 @@
-import { UserEntity } from 'src/users/entities/user.entity';
-import { BaseModel } from 'src/common/entities/base.entity';
-import Coin from 'src/users/enums/coin.enum';
 import {
   Column,
   CreateDateColumn,
@@ -10,8 +7,9 @@ import {
   PrimaryGeneratedColumn,
   RelationId,
 } from 'typeorm';
-import { WalletEntity } from 'src/users/entities/wallet.entity';
-import { AssetEntity } from 'src/assets/entities/asset.entity';
+import { AssetEntity } from '../../assets/entities/asset.entity';
+import { UserEntity } from '../../users/entities/user.entity';
+import Coin from '../../users/enums/coin.enum';
 
 @Entity('transactions')
 export class TransactionEntity {

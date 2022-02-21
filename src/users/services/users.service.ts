@@ -1,11 +1,11 @@
 import { UserNotFoundException } from './../exceptions/user-not-found.exception';
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
-import { RegisterUserInput } from 'src/auth/dto/register-user.input';
-import Role from 'src/auth/enums/role.enum';
 import { UpdateUserInput } from '../dto/update-user.input';
 import { UserEntity } from '../entities/user.entity';
 import { UsersRepository } from '../repositories/users.repository';
 import { WalletsService } from './wallets.service';
+import { RegisterUserInput } from '../../auth/dto/register-user.input';
+import Role from '../../auth/enums/role.enum';
 
 @Injectable()
 export class UsersService {

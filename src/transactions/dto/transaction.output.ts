@@ -1,7 +1,7 @@
-import { UserProfileOutput } from 'src/users/dto/user-profile.output';
 import { Field, ObjectType, GraphQLISODateTime } from '@nestjs/graphql';
-import Coin from 'src/users/enums/coin.enum';
-import { Asset } from 'src/assets/models/asset.model';
+import { Asset } from '../../assets/models/asset.model';
+import { UserProfileOutput } from '../../users/dto/user-profile.output';
+import Coin from '../../users/enums/coin.enum';
 
 @ObjectType()
 export class TransactionOutput {

@@ -1,5 +1,5 @@
-import { UserEntity } from 'src/users/entities/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
+import { UserEntity } from '../entities/user.entity';
 import { WalletEntity } from '../entities/wallet.entity';
 
 @EntityRepository(WalletEntity)

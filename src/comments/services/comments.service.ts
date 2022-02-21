@@ -1,13 +1,13 @@
 import { OrderBy } from '../../common/pagination-filtering/order-by.input';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { AssetsService } from 'src/assets/assets.service';
-import { CommentEntity } from 'src/comments/entities/comment.entity';
-import { PaginationArgs } from 'src/common/pagination-filtering/pagination.args';
-import { UserEntity } from 'src/users/entities/user.entity';
 import { CreateCommentInput } from '../dto/create-comment.input';
 import { UpdateCommentInput } from '../dto/update-comment.input';
 import { CommentNotFoundException } from '../exceptions/comment-not-found.exception';
 import { CommentRepository } from '../repositories/comments.repository';
+import { AssetsService } from '../../assets/assets.service';
+import { PaginationArgs } from '../../common/pagination-filtering/pagination.args';
+import { UserEntity } from '../../users/entities/user.entity';
+import { CommentEntity } from '../entities/comment.entity';
 
 @Injectable()
 export class CommentsService {

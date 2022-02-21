@@ -1,5 +1,3 @@
-import { UserEntity } from 'src/users/entities/user.entity';
-import { BaseModel } from 'src/common/entities/base.entity';
 import {
   Check,
   Column,
@@ -9,7 +7,9 @@ import {
   PrimaryGeneratedColumn,
   RelationId,
 } from 'typeorm';
+import { BaseModel } from '../../common/entities/base.entity';
 import Coin from '../enums/coin.enum';
+import { UserEntity } from './user.entity';
 
 @Entity('wallets')
 @Check('"balance" >= 0')

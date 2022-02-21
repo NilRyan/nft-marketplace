@@ -1,13 +1,13 @@
 import { NotEnoughBalanceException } from './../../users/exceptions/not-enough-balance.exception';
 import { AssetNotFoundException } from './../../assets/exceptions/asset-not-found.exception';
-import { AssetsService } from 'src/assets/assets.service';
 import { WalletsService } from './../../users/services/wallets.service';
 import { TransactionRepository } from './../repositories/transaction.repository';
-import { UserEntity } from 'src/users/entities/user.entity';
 import { Injectable, Logger } from '@nestjs/common';
-import { AssetEntity } from 'src/assets/entities/asset.entity';
-import { BuyOwnAssetForbiddenException } from 'src/assets/exceptions/buy-asset-forbidden.exception';
 import { Connection } from 'typeorm';
+import { AssetsService } from '../../assets/assets.service';
+import { AssetEntity } from '../../assets/entities/asset.entity';
+import { BuyOwnAssetForbiddenException } from '../../assets/exceptions/buy-asset-forbidden.exception';
+import { UserEntity } from '../../users/entities/user.entity';
 
 @Injectable()
 export class TransactionsService {

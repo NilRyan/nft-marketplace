@@ -1,6 +1,3 @@
-import { AssetEntity } from 'src/assets/entities/asset.entity';
-import { BaseModel } from 'src/common/entities/base.entity';
-import { UserEntity } from 'src/users/entities/user.entity';
 import {
   Entity,
   Column,
@@ -8,6 +5,9 @@ import {
   ManyToOne,
   RelationId,
 } from 'typeorm';
+import { AssetEntity } from '../../assets/entities/asset.entity';
+import { BaseModel } from '../../common/entities/base.entity';
+import { UserEntity } from '../../users/entities/user.entity';
 
 @Entity('comments')
 export class CommentEntity extends BaseModel {

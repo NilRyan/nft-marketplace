@@ -1,8 +1,9 @@
-import { UserEntity } from 'src/users/entities/user.entity';
 import { UseGuards } from '@nestjs/common';
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { GetUser } from 'src/auth/get-user.decorator';
-import { GqlAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { GetUser } from '../../auth/get-user.decorator';
+import { GqlAuthGuard } from '../../auth/guards/graphql-jwt-auth.guard';
+import { UserEntity } from '../../users/entities/user.entity';
+
 import { TransactionOutput } from '../dto/transaction.output';
 import { TransactionsService } from '../services/transactions.service';
 @UseGuards(GqlAuthGuard)

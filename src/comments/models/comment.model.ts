@@ -1,6 +1,6 @@
-import { UserProfileOutput } from 'src/users/dto/user-profile.output';
 import { Field, ObjectType, GraphQLISODateTime } from '@nestjs/graphql';
-import { Asset } from 'src/assets/models/asset.model';
+import { Asset } from '../../assets/models/asset.model';
+import { UserProfileOutput } from '../../users/dto/user-profile.output';
 
 @ObjectType()
 export class Comment {

@@ -1,9 +1,10 @@
-import { Asset } from 'src/assets/models/asset.model';
+
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { GetUser } from 'src/auth/get-user.decorator';
-import { GqlAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
-import { UserEntity } from 'src/users/entities/user.entity';
+import { GetUser } from '../../auth/get-user.decorator';
+import { GqlAuthGuard } from '../../auth/guards/graphql-jwt-auth.guard';
+import { UserEntity } from '../../users/entities/user.entity';
+
 import { CreateCommentInput } from '../dto/create-comment.input';
 import { UpdateCommentInput } from '../dto/update-comment.input';
 import { Comment } from '../models/comment.model';

@@ -1,6 +1,6 @@
-import { Asset } from 'src/assets/models/asset.model';
-import { Field, ObjectType } from '@nestjs/graphql';
-import { PaginationInfo } from 'src/common/pagination-filtering/pagination-info.output';
+import { ObjectType, Field } from '@nestjs/graphql';
+import { PaginationInfo } from '../../common/pagination-filtering/pagination-info.output';
+import { Asset } from './asset.model';
 
 @ObjectType()
 export class PaginatedAssets {
