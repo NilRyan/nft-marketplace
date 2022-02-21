@@ -31,12 +31,8 @@ export class AuthService {
       return createdUser;
     } catch (err) {
       if (err?.code === PostgresErrorCode.UniqueViolation) {
-        throw new HttpException(
-          'Username or email already taken',
-          HttpStatus.BAD_REQUEST,
-        );
+        throw new BadRequestException('Username or email already exists');
       }
-
       throw new HttpException(
         'Something went wrong',
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -56,13 +52,13 @@ export class AuthService {
     return { accessToken };
   }
 
-  async getUserFromJwt(token: string) {
-    const { id } = this.jwtService.verify(token, {
-      secret: this.configService.get('JWT_SECRET'),
-    });
-    if (!id) throw new UnauthorizedException('Invalid token');
-    return await this.usersService.getUserById(id);
-  }
+  // async getUserFromJwt(token: string) {
+  //   const { id } = this.jwtService.verify(token, {
+  //     secret: this.configService.get('JWT_SECRET'),
+  //   });
+  //   if (!id) throw new UnauthorizedException('Invalid token');
+  //   return await this.usersService.getUserById(id);
+  // }
 
   private async verifyPassword(
     plainTextPassword: string,
@@ -73,10 +69,7 @@ export class AuthService {
       hashedPassword,
     );
     if (!isPasswordMatching) {
-      throw new HttpException(
-        'Wrong credentials provided',
-        HttpStatus.UNAUTHORIZED,
-      );
+      throw new UnauthorizedException('Invalid password');
     }
   }
 }
