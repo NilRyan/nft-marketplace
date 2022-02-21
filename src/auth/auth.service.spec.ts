@@ -74,7 +74,7 @@ describe('Authentication Service', () => {
       expect(actualUser).toEqual(expectedUser);
       expect(actualUser.password).toBeUndefined();
     });
-    it('throws an error', async () => {
+    it('it throws a 400 Bad Request if username or email is taken', async () => {
       const uniqueViolationError = new Error('UniqueViolation') as any;
       uniqueViolationError.code = PostgresErrorCode.UniqueViolation;
       usersService.createUserWithWallet.mockRejectedValue(uniqueViolationError);

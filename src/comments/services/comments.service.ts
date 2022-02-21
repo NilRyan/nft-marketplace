@@ -3,7 +3,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateCommentInput } from '../dto/create-comment.input';
 import { UpdateCommentInput } from '../dto/update-comment.input';
 import { CommentNotFoundException } from '../exceptions/comment-not-found.exception';
-import { CommentRepository } from '../repositories/comments.repository';
+import { CommentsRepository } from '../repositories/comments.repository';
 import { AssetsService } from '../../assets/assets.service';
 import { PaginationArgs } from '../../common/pagination-filtering/pagination.args';
 import { UserEntity } from '../../users/entities/user.entity';
@@ -12,7 +12,7 @@ import { CommentEntity } from '../entities/comment.entity';
 @Injectable()
 export class CommentsService {
   constructor(
-    private readonly commentRepository: CommentRepository,
+    private readonly commentRepository: CommentsRepository,
     private readonly assetsService: AssetsService,
   ) {}
 
@@ -23,12 +23,13 @@ export class CommentsService {
     const asset = await this.assetsService.getAssetById(
       createCommentInput.assetId,
     );
-    const newComment = this.commentRepository.create({
-      ...createCommentInput,
+    if (!asset) throw new CommentNotFoundException(createCommentInput.assetId);
+
+    return await this.commentRepository.createComment(
+      createCommentInput,
       author,
       asset,
-    });
-    return this.commentRepository.save(newComment);
+    );
   }
 
   async getPaginatedCommentsForAsset(
