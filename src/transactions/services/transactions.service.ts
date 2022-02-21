@@ -1,4 +1,3 @@
-import { TransactionEntity } from './../entities/transaction.entity';
 import { NotEnoughBalanceException } from './../../users/exceptions/not-enough-balance.exception';
 import { AssetNotFoundException } from './../../assets/exceptions/asset-not-found.exception';
 import { AssetsService } from 'src/assets/assets.service';
@@ -23,13 +22,8 @@ export class TransactionsService {
 
   async buyAsset(assetId: string, buyer: UserEntity) {
     const asset = await this.assetsService.getAssetAndOwner(assetId);
-    if (!asset) throw new AssetNotFoundException(assetId);
-    if (asset.ownerId === buyer.id) {
-      throw new BuyOwnAssetForbiddenException(assetId);
-    }
-    if (+buyer.wallet.balance < +asset.price) {
-      throw new NotEnoughBalanceException();
-    }
+    this.validateTransaction(asset, assetId, buyer);
+
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -44,7 +38,8 @@ export class TransactionsService {
           this.assetsService.transferOwnership(asset, buyer),
           this.assetsService.increaseAssetValue(asset),
         ]),
-      ); 
+      );
+
       await queryRunner.commitTransaction();
 
       return this.transactionRepository.findOne(id, {
@@ -69,7 +64,19 @@ export class TransactionsService {
       relations: ['asset', 'buyer', 'seller', 'asset.owner'],
     });
   }
-
+  private validateTransaction(
+    asset: AssetEntity,
+    assetId: string,
+    buyer: UserEntity,
+  ) {
+    if (!asset) throw new AssetNotFoundException(assetId);
+    if (asset.ownerId === buyer.id) {
+      throw new BuyOwnAssetForbiddenException(assetId);
+    }
+    if (+buyer.wallet.balance < +asset.price) {
+      throw new NotEnoughBalanceException();
+    }
+  }
   private createBuyTransactionEntity(asset: AssetEntity, buyer: UserEntity) {
     const transaction = {
       asset,
