@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import { UsersService } from '../users/services/users.service';
 import { AuthService } from './auth.service';
+import * as bcrypt from 'bcrypt';
 
 const mockConfigService = {
   get(key: string) {
@@ -56,7 +57,7 @@ describe('Authentication Service', () => {
   });
 
   describe('register', () => {
-    it('returns the created User', async () => {
+    it('returns the created User without the password', async () => {
       const registrationData: RegisterUserInput = {
         username: 'philipcalape',
         password: 'password123',
@@ -64,15 +65,12 @@ describe('Authentication Service', () => {
         lastName: 'Calape',
         email: 'randomemail@gmail.com',
       };
-      const expectedUser = new UserEntity();
-      expectedUser.username = registrationData.username;
-      expectedUser.firstName = registrationData.firstName;
-      expectedUser.lastName = registrationData.lastName;
-      expectedUser.email = registrationData.email;
+      const expectedUser = { ...registrationData };
       usersService.createUserWithWallet.mockResolvedValue(expectedUser);
 
       const actualUser = await authService.register(registrationData);
       expect(actualUser).toEqual(expectedUser);
+      expect(actualUser.password).toBeUndefined();
     });
   });
 });
