@@ -8,6 +8,7 @@ import { AssetsService } from '../../assets/assets.service';
 import { PaginationArgs } from '../../common/pagination-filtering/pagination.args';
 import { UserEntity } from '../../users/entities/user.entity';
 import { CommentEntity } from '../entities/comment.entity';
+import { AssetNotFoundException } from '../../assets/exceptions/asset-not-found.exception';
 
 @Injectable()
 export class CommentsService {
@@ -23,8 +24,7 @@ export class CommentsService {
     const asset = await this.assetsService.getAssetById(
       createCommentInput.assetId,
     );
-    if (!asset) throw new CommentNotFoundException(createCommentInput.assetId);
-
+    if (!asset) throw new AssetNotFoundException(createCommentInput.assetId);
     return await this.commentRepository.createComment(
       createCommentInput,
       author,
@@ -36,29 +36,10 @@ export class CommentsService {
     assetId: string,
     pagination: PaginationArgs,
   ) {
-    const { limit, offset, orderBy } = pagination;
-    const { field, sortOrder } = orderBy as unknown as OrderBy;
-    const [comments, count] = await this.commentRepository.findAndCount({
-      where: {
-        asset: {
-          id: assetId,
-        },
-      },
-      order: {
-        [field]: sortOrder,
-      },
-      skip: offset,
-      take: limit,
-    });
-
-    return {
-      comments,
-      paginationInfo: {
-        total: count,
-        limit,
-        offset,
-      },
-    };
+    return await this.commentRepository.getPaginatedCommentsForAsset(
+      assetId,
+      pagination,
+    );
   }
 
   async getCommentById(commentId: string) {
@@ -70,26 +51,20 @@ export class CommentsService {
   async updateComment(
     updateCommentInput: UpdateCommentInput,
     user: UserEntity,
-  ) {
+  ): Promise<CommentEntity> {
     const { id } = updateCommentInput;
     const comment = await this.commentRepository.findOne(id);
     if (!comment) throw new CommentNotFoundException(id);
 
-    await this.verifyUserIsAuthor(comment, user.id);
+    this.verifyUserIsAuthor(comment, user.id);
 
-    await this.commentRepository.update(id, updateCommentInput);
-    const updatedComment = await this.commentRepository.findOne(id, {
-      relations: ['author', 'asset'],
-    });
-
-    return updatedComment;
+    return await this.commentRepository.updateComment(updateCommentInput);
   }
 
   async deleteComment(id: string, user: UserEntity) {
     const comment = await this.commentRepository.findOne(id);
-
-    this.verifyUserIsAuthor(comment, user.id);
     if (!comment) throw new CommentNotFoundException(id);
+    this.verifyUserIsAuthor(comment, user.id);
     await this.commentRepository.delete(id);
 
     return comment;
