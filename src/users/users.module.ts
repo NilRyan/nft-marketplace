@@ -1,4 +1,4 @@
-import { WalletRepository } from './repositories/wallets.repository';
+import { WalletsRepository } from './repositories/wallets.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import { UsersService } from './services/users.service';
@@ -7,10 +7,10 @@ import { UsersRepository } from './repositories/users.repository';
 import { WalletsService } from './services/wallets.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UsersRepository, WalletRepository])],
+  imports: [TypeOrmModule.forFeature([UsersRepository, WalletsRepository])],
   providers: [UsersResolver, UsersService, WalletsService],
   exports: [
-    TypeOrmModule.forFeature([UsersRepository, WalletRepository]),
+    TypeOrmModule.forFeature([UsersRepository, WalletsRepository]),
     UsersService,
     WalletsService,
   ],
