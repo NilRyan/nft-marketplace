@@ -15,12 +15,10 @@ export class RegisterUserInput {
   username: string;
 
   @Field()
-  @IsAlpha()
   @Length(1, 60)
   firstName: string;
 
   @Field()
-  @IsAlpha()
   @Length(1, 60)
   lastName: string;
 

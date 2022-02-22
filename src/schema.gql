@@ -108,7 +108,6 @@ type TransactionOutput {
 
 type Query {
   viewWallet: WalletOutput!
-  getAllUsers: [UserProfileOutput!]!
   getUserProfile(id: String!): UserProfileOutput!
   getAllAssets(limit: Float = 10, offset: Float = 0, orderBy: OrderBy = {field: "createdAt", sortOrder: "DESC"}, searchTerm: String!): PaginatedAssets!
   getAssetById(assetId: ID!): Asset!
@@ -140,7 +139,7 @@ input UpdateUserInput {
   firstName: String
   lastName: String
   email: String
-  password: String
+  aboutMe: String
 }
 
 input CreateCommentInput {

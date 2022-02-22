@@ -1,11 +1,17 @@
 import { UserNotFoundException } from './../exceptions/user-not-found.exception';
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  UnauthorizedException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { UpdateUserInput } from '../dto/update-user.input';
 import { UserEntity } from '../entities/user.entity';
 import { UsersRepository } from '../repositories/users.repository';
 import { WalletsService } from './wallets.service';
 import { RegisterUserInput } from '../../auth/dto/register-user.input';
 import Role from '../../auth/enums/role.enum';
+import PostgresErrorCode from '../../database/postgres-error-code.enum';
 
 @Injectable()
 export class UsersService {
@@ -23,12 +29,8 @@ export class UsersService {
     const wallet = await this.walletsService.createWallet(user);
     user.wallet = wallet;
     user.walletId = wallet.id;
-    return await this.userRepository.save(user);
-  }
-  async getAllUsers() {
-    return await this.userRepository.find({
-      relations: ['assets'],
-    });
+    await this.userRepository.save(user);
+    return user;
   }
 
   async getUserById(id: string): Promise<UserEntity> {
@@ -40,7 +42,16 @@ export class UsersService {
   }
 
   async updateUser(updateUserInput: UpdateUserInput, user: UserEntity) {
-    await this.userRepository.update(user.id, updateUserInput);
+    try {
+      await this.userRepository.update(user.id, updateUserInput);
+    } catch (err) {
+      if (err?.code === PostgresErrorCode.UniqueViolation) {
+        throw new ForbiddenException(
+          "Can't update user with given username or email",
+        );
+      }
+    }
+
     const updatedUser = await this.userRepository.findOne(user.id, {
       relations: ['assets'],
     });
@@ -48,21 +59,26 @@ export class UsersService {
   }
 
   async deleteUser(userId: string, user: UserEntity) {
-    if (user.id !== userId || user.role !== Role.Admin) {
-      throw new UnauthorizedException(
-        `You can't delete user with id: ${userId}`,
-      );
+    if (user.id === userId) {
+      await this.userRepository.softDelete(userId);
+      return user;
+    } else if (user.role === Role.Admin) {
+      const userToDelete = await this.userRepository.findOne(userId);
+      if (!userToDelete) throw new UserNotFoundException(userId);
+      await this.userRepository.softDelete(userId);
+      return userToDelete;
     }
-    await this.userRepository.softDelete(userId);
-    return user;
+    throw new UnauthorizedException(`You can't delete user with id: ${userId}`);
   }
 
   async restoreDeletedUser(userId: string) {
-    const user = await this.userRepository.findOne(userId);
-    if (!user) throw new UserNotFoundException(userId);
+    const deletedUser = await this.userRepository.findOne(userId, {
+      withDeleted: true,
+    });
+    if (!deletedUser) throw new UserNotFoundException(userId);
     await this.userRepository.restore(userId);
 
-    return user;
+    return deletedUser;
   }
 
   async getUserByUsername(username: string): Promise<UserEntity> {

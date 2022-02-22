@@ -17,10 +17,10 @@ import { UsersService } from '../services/users.service';
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
-  @Query(() => [UserProfileOutput])
-  getAllUsers() {
-    return this.usersService.getAllUsers();
-  }
+  // @Query(() => [UserProfileOutput])
+  // getAllUsers() {
+  //   return this.usersService.getAllUsers();
+  // }
 
   @Query(() => UserProfileOutput)
   async getUserProfile(@Args('id', { type: () => String }) id: string) {
