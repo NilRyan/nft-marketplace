@@ -47,10 +47,15 @@ export class TransactionsService {
       });
     } catch (err) {
       await queryRunner.rollbackTransaction();
-      throw new Error(err);
+      this.logger.error(
+        err,
+        'Error while buying asset, transaction rolled back',
+      );
+      throw new Error('Something went wrong while buying asset');
     } finally {
-      queryRunner.release();
+      await queryRunner.release();
     }
+    
   }
 
   async viewTransactions(user: UserEntity) {
