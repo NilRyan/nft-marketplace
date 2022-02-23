@@ -18,7 +18,7 @@ const mockCommentsRepository = () => ({
 });
 
 const mockAssetsService = () => ({
-  getAssetById: jest.fn(),
+  getAssetAndOwner: jest.fn(),
 });
 
 const mockUserEntity = {
@@ -55,7 +55,7 @@ describe('Comments Service', () => {
 
   describe('createComment', () => {
     it('returns the created Comment', async () => {
-      assetsService.getAssetById.mockResolvedValue({
+      assetsService.getAssetAndOwner.mockResolvedValue({
         id: '25',
         name: 'testAsset',
         description: 'testAssetDescription',
@@ -79,7 +79,7 @@ describe('Comments Service', () => {
     });
 
     it('throws a AssetNotFoundException if asset does not exist', async () => {
-      assetsService.getAssetById.mockResolvedValue(null);
+      assetsService.getAssetAndOwner.mockResolvedValue(null);
       expect(
         commentsService.createComment(
           {

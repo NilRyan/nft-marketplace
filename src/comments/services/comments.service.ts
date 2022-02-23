@@ -21,7 +21,7 @@ export class CommentsService {
     createCommentInput: CreateCommentInput,
     author: UserEntity,
   ) {
-    const asset = await this.assetsService.getAssetById(
+    const asset = await this.assetsService.getAssetAndOwner(
       createCommentInput.assetId,
     );
     if (!asset) throw new AssetNotFoundException(createCommentInput.assetId);

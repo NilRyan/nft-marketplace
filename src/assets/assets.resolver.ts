@@ -49,7 +49,7 @@ export class AssetResolver {
 
   @Query(() => Asset)
   async getAssetById(@Args('assetId', { type: () => ID }) assetId: string) {
-    return await this.assetsService.getAssetById(assetId);
+    return await this.assetsService.getAssetAndOwner(assetId);
   }
 
   @ResolveField('comments')

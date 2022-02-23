@@ -8,7 +8,7 @@ import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { LoginInput } from './dto/login.input';
 import PostgresErrorCode from '../database/postgres-error-code.enum';
 
-const mockConfigService = {
+const mockConfigService = () => ({
   get(key: string) {
     switch (key) {
       case 'JWT_SECRET':
@@ -17,11 +17,11 @@ const mockConfigService = {
         return 86400;
     }
   },
-};
+});
 
-const mockJwtService = {
+const mockJwtService = () => ({
   signAsync: jest.fn(),
-};
+});
 
 const mockUsersService = () => ({
   getUserByUsername: jest.fn(),
@@ -40,11 +40,11 @@ describe('Authentication Service', () => {
         AuthService,
         {
           provide: ConfigService,
-          useValue: mockConfigService,
+          useFactory: mockConfigService,
         },
         {
           provide: JwtService,
-          useValue: mockJwtService,
+          useFactory: mockJwtService,
         },
         {
           provide: UsersService,
@@ -74,7 +74,7 @@ describe('Authentication Service', () => {
       expect(actualUser).toEqual(expectedUser);
       expect(actualUser.password).toBeUndefined();
     });
-    it('it throws a 400 Bad Request if username or email is taken', async () => {
+    it('throws a 400 Bad Request if username or email is taken', async () => {
       const uniqueViolationError = new Error('UniqueViolation') as any;
       uniqueViolationError.code = PostgresErrorCode.UniqueViolation;
       usersService.createUserWithWallet.mockRejectedValue(uniqueViolationError);

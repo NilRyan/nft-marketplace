@@ -31,13 +31,6 @@ export class AssetsService {
     return await this.assetRepository.getAssets(assetSearchArgs);
   }
 
-  async getAssetById(assetId: string) {
-    const asset = await this.assetRepository.findOne(assetId, {
-      relations: ['owner'],
-    });
-    if (!asset) throw new AssetNotFoundException(assetId);
-    return asset;
-  }
   async getAssetAndOwner(assetId: string): Promise<AssetEntity> {
     const asset = await this.assetRepository.getAssetAndOwner(assetId);
     if (!asset) throw new AssetNotFoundException(assetId);
