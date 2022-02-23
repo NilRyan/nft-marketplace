@@ -21,11 +21,15 @@ async function bootstrap() {
 }
 bootstrap();
 /* TODO: Important
-1. Enable atomicity with query runner, add missing entity fields for user
-2. Unit tests
-3. DataLoader
+1. Enable atomicity with query runner, add missing entity fields for user -DONE
+2. Unit tests - SOMEWHAT DONE
+3. DataLoader - try to find a way to implement
 4. Caching
 5. Index postgres
+6. DB migrations
+7. Code Cleanup
+8. Create Readme
+9. Deploy to Heroku
 */
 
 /*

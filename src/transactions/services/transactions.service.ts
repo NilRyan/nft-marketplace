@@ -55,7 +55,6 @@ export class TransactionsService {
     } finally {
       await queryRunner.release();
     }
-    
   }
 
   async viewTransactions(user: UserEntity) {

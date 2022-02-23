@@ -1,7 +1,5 @@
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import * as currency from 'currency.js';
-
-import { ILike } from 'typeorm';
 import Role from '../auth/enums/role.enum';
 import { AssetSearchArgs } from '../common/pagination-filtering/asset-search.args';
 import { UserEntity } from '../users/entities/user.entity';
@@ -16,14 +14,7 @@ export class AssetsService {
 
   constructor(private readonly assetRepository: AssetsRepository) {}
   async createAsset(createAssetInput: CreateAssetInput, user: UserEntity) {
-    const newAsset = this.assetRepository.create({
-      ...createAssetInput,
-      owner: user,
-      creator: user,
-      creatorId: user.id,
-    });
-
-    return await this.assetRepository.save(newAsset);
+    return await this.assetRepository.createAsset(createAssetInput, user);
   }
 
   async transferOwnership(
@@ -37,42 +28,7 @@ export class AssetsService {
   }
 
   async getAssets(assetSearchArgs: AssetSearchArgs) {
-    const { searchTerm, limit, offset, orderBy } = assetSearchArgs;
-    const { field, sortOrder } = orderBy;
-    const [assets, count] = await this.assetRepository.findAndCount({
-      where: [
-        { title: ILike(`%${searchTerm}%`) },
-        { description: ILike(`%${searchTerm}%`) },
-        { category: ILike(`%${searchTerm}%`) },
-        { creator: { username: ILike(`%${searchTerm}%`) } },
-        { creator: { firstName: ILike(`%${searchTerm}%`) } },
-        { creator: { lastName: ILike(`%${searchTerm}%`) } },
-        { owner: { username: ILike(`%${searchTerm}%`) } },
-        { owner: { firstName: ILike(`%${searchTerm}%`) } },
-        { owner: { lastName: ILike(`%${searchTerm}%`) } },
-      ],
-      order: {
-        [field]: sortOrder,
-      },
-      skip: offset,
-      take: limit,
-      relations: ['owner', 'creator'],
-    });
-    // if (count === 0)
-    //   return {
-    //     assets: [],
-    //     paginationInfo: {
-    //       total: count,
-    //     },
-    //   };
-    return {
-      assets,
-      paginationInfo: {
-        total: count,
-        limit,
-        offset,
-      },
-    };
+    return await this.assetRepository.getAssets(assetSearchArgs);
   }
 
   async getAssetById(assetId: string) {

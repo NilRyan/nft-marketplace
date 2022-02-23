@@ -91,7 +91,7 @@ describe('Authentication Service', () => {
     });
   });
   describe('login', () => {
-    it('it returns token if authenticated', async () => {
+    it('returns token if authenticated', async () => {
       const loginInput: LoginInput = {
         username: 'neilryan',
         password: 'password123',
