@@ -1,6 +1,6 @@
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './users/users.module';
 import { CommentsModule } from './comments/comments.module';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { WalletsResolver } from './users/resolvers/wallets.resolver';
 import { TransactionsModule } from './transactions/transactions.module';
 import { AssetsModule } from './assets/assets.module';
+import databaseConfig from './database/database.config';
 
 /* TODO: 
     1. Add PostgreSQL and TypeORM // done
@@ -41,9 +42,14 @@ import { AssetsModule } from './assets/assets.module';
       }),
     }),
     ConfigModule.forRoot({
-      envFilePath: ['.env.development', '.env.production'],
+      envFilePath: ['.env', '.env.production'],
+      load: [databaseConfig],
+      isGlobal: true,
     }),
-    DatabaseModule,
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({...configService.get('database')}),
+    }),
     UsersModule,
     CommentsModule,
     AssetsModule,
