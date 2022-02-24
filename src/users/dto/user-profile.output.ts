@@ -1,4 +1,5 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType, GraphQLISODateTime } from '@nestjs/graphql';
+import Gender from '../enums/gender.enum';
 
 @ObjectType()
 export class UserProfileOutput {
@@ -13,6 +14,12 @@ export class UserProfileOutput {
 
   @Field({ nullable: true })
   aboutMe?: string;
+
+  @Field(() => GraphQLISODateTime)
+  birthDate: Date;
+
+  @Field(() => Gender)
+  gender: Gender;
 
   @Field()
   firstName: string;

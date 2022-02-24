@@ -10,7 +10,7 @@ import {
   RelationId,
 } from 'typeorm';
 import { CommentEntity } from '../../comments/entities/comment.entity';
-import { BaseModel } from '../../common/entities/base.entity';
+import { BaseModel } from '../../common/models/base.model';
 import { UserEntity } from '../../users/entities/user.entity';
 
 @Entity('asset')

@@ -1,9 +1,9 @@
 import { CommentsModule } from './../comments/comments.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { forwardRef, Module } from '@nestjs/common';
-import { AssetResolver } from './assets.resolver';
-import { AssetsRepository } from './assets.repository';
-import { AssetsService } from './assets.service';
+import { AssetResolver } from './resolvers/assets.resolver';
+import { AssetsRepository } from './repositories/assets.repository';
+import { AssetsService } from './services/assets.service';
 import { CommentsService } from '../comments/services/comments.service';
 
 @Module({

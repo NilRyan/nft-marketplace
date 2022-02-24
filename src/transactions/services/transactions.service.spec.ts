@@ -3,7 +3,7 @@ import { NotEnoughBalanceException } from './../../users/exceptions/not-enough-b
 import { AssetEntity } from 'src/assets/entities/asset.entity';
 import { Test } from '@nestjs/testing';
 import { Connection } from 'typeorm';
-import { AssetsService } from '../../assets/assets.service';
+import { AssetsService } from '../../assets/services/assets.service';
 import { UserEntity } from '../../users/entities/user.entity';
 import { WalletEntity } from '../../users/entities/wallet.entity';
 import Coin from '../../users/enums/coin.enum';

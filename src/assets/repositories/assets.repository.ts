@@ -1,8 +1,8 @@
-import { CreateAssetInput } from './dto/create-asset.input';
+import { CreateAssetInput } from '../dto/create-asset.input';
 import { EntityRepository, ILike, Repository } from 'typeorm';
-import { AssetEntity } from './entities/asset.entity';
-import { UserEntity } from '../users/entities/user.entity';
-import { AssetSearchArgs } from '../common/pagination-filtering/asset-search.args';
+import { AssetEntity } from '../entities/asset.entity';
+import { UserEntity } from '../../users/entities/user.entity';
+import { AssetSearchArgs } from '../../common/pagination-filtering/asset-search.args';
 
 @EntityRepository(AssetEntity)
 export class AssetsRepository extends Repository<AssetEntity> {

@@ -6,7 +6,7 @@ import {
   RelationId,
 } from 'typeorm';
 import { AssetEntity } from '../../assets/entities/asset.entity';
-import { BaseModel } from '../../common/entities/base.entity';
+import { BaseModel } from '../../common/models/base.model';
 import { UserEntity } from '../../users/entities/user.entity';
 
 @Entity('comments')

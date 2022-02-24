@@ -1,4 +1,4 @@
-import { LoginInput } from './dto/login.input';
+import { LoginInput } from '../dto/login.input';
 import {
   BadRequestException,
   HttpException,
@@ -7,11 +7,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { RegisterUserInput } from './dto/register-user.input';
+import { RegisterUserInput } from '../../users/dto/register-user.input';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
-import PostgresErrorCode from '../database/postgres-error-code.enum';
-import { UsersService } from '../users/services/users.service';
+import PostgresErrorCode from '../../database/enums/postgres-error-code.enum';
+import { UsersService } from '../../users/services/users.service';
 @Injectable()
 export class AuthService {
   constructor(

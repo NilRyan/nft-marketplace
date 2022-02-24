@@ -1,12 +1,12 @@
-import { RegisterUserInput } from '../auth/dto/register-user.input';
+import { RegisterUserInput } from '../../users/dto/register-user.input';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
-import { UsersService } from '../users/services/users.service';
+import { UsersService } from '../../users/services/users.service';
 import { AuthService } from './auth.service';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
-import { LoginInput } from './dto/login.input';
-import PostgresErrorCode from '../database/postgres-error-code.enum';
+import { LoginInput } from '../dto/login.input';
+import PostgresErrorCode from '../../database/enums/postgres-error-code.enum';
 
 const mockConfigService = () => ({
   get(key: string) {

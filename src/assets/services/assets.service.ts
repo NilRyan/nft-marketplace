@@ -1,12 +1,12 @@
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import * as currency from 'currency.js';
-import Role from '../auth/enums/role.enum';
-import { AssetSearchArgs } from '../common/pagination-filtering/asset-search.args';
-import { UserEntity } from '../users/entities/user.entity';
-import { AssetsRepository } from './assets.repository';
-import { CreateAssetInput } from './dto/create-asset.input';
-import { AssetEntity } from './entities/asset.entity';
-import { AssetNotFoundException } from './exceptions/asset-not-found.exception';
+import Role from '../../auth/enums/role.enum';
+import { AssetSearchArgs } from '../../common/pagination-filtering/asset-search.args';
+import { UserEntity } from '../../users/entities/user.entity';
+import { CreateAssetInput } from '../dto/create-asset.input';
+import { AssetEntity } from '../entities/asset.entity';
+import { AssetNotFoundException } from '../exceptions/asset-not-found.exception';
+import { AssetsRepository } from '../repositories/assets.repository';
 
 @Injectable()
 export class AssetsService {

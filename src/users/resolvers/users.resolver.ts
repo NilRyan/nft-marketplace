@@ -1,7 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import Role from '../../auth/enums/role.enum';
-import { GetUser } from '../../auth/get-user.decorator';
+import { GetCurrentUser } from '../../auth/decorators/get-current-user.decorator';
 import { GqlAuthGuard } from '../../auth/guards/graphql-jwt-auth.guard';
 import RoleGuard from '../../auth/guards/role.guards';
 
@@ -33,7 +33,7 @@ export class UsersResolver {
   @Mutation(() => UserProfileOutput)
   async updateUser(
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
-    @GetUser() user: UserEntity,
+    @GetCurrentUser() user: UserEntity,
   ) {
     return await this.usersService.updateUser(updateUserInput, user);
   }
@@ -41,7 +41,7 @@ export class UsersResolver {
   @Mutation(() => UserProfileOutput)
   async deleteUser(
     @Args('userId', { type: () => String }) userId: string,
-    @GetUser() user: UserEntity,
+    @GetCurrentUser() user: UserEntity,
   ) {
     return await this.usersService.deleteUser(userId, user);
   }

@@ -4,7 +4,7 @@ import { WalletsService } from './../../users/services/wallets.service';
 import { TransactionRepository } from './../repositories/transaction.repository';
 import { Injectable, Logger } from '@nestjs/common';
 import { Connection } from 'typeorm';
-import { AssetsService } from '../../assets/assets.service';
+import { AssetsService } from '../../assets/services/assets.service';
 import { AssetEntity } from '../../assets/entities/asset.entity';
 import { BuyOwnAssetForbiddenException } from '../../assets/exceptions/buy-asset-forbidden.exception';
 import { UserEntity } from '../../users/entities/user.entity';

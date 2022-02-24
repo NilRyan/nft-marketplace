@@ -1,13 +1,13 @@
 import { UnauthorizedException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import Role from '../auth/enums/role.enum';
-import { AssetSearchArgs } from '../common/pagination-filtering/asset-search.args';
-import { UserEntity } from '../users/entities/user.entity';
-import { AssetsRepository } from './assets.repository';
+import Role from '../../auth/enums/role.enum';
+import { AssetSearchArgs } from '../../common/pagination-filtering/asset-search.args';
+import { UserEntity } from '../../users/entities/user.entity';
+import { AssetsRepository } from '../repositories/assets.repository';
 import { AssetsService } from './assets.service';
-import { CreateAssetInput } from './dto/create-asset.input';
-import { AssetEntity } from './entities/asset.entity';
-import { AssetNotFoundException } from './exceptions/asset-not-found.exception';
+import { CreateAssetInput } from '../dto/create-asset.input';
+import { AssetEntity } from '../entities/asset.entity';
+import { AssetNotFoundException } from '../exceptions/asset-not-found.exception';
 
 const mockAssetsRepository = () => ({
   createAsset: jest.fn(),

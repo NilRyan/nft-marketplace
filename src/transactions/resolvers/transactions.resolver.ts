@@ -1,6 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
-import { GetUser } from '../../auth/get-user.decorator';
+import { GetCurrentUser } from '../../auth/decorators/get-current-user.decorator';
 import { GqlAuthGuard } from '../../auth/guards/graphql-jwt-auth.guard';
 import { UserEntity } from '../../users/entities/user.entity';
 
@@ -14,13 +14,13 @@ export class TransactionsResolver {
   @Mutation(() => TransactionOutput)
   buyAsset(
     @Args('assetId', { type: () => String }) assetId: string,
-    @GetUser() user: UserEntity,
+    @GetCurrentUser() user: UserEntity,
   ) {
     return this.transactionsService.buyAsset(assetId, user);
   }
 
   @Query(() => [TransactionOutput])
-  viewTransactions(@GetUser() user: UserEntity) {
+  viewTransactions(@GetCurrentUser() user: UserEntity) {
     return this.transactionsService.viewTransactions(user);
   }
 }

@@ -1,5 +1,6 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType, GraphQLISODateTime } from '@nestjs/graphql';
 import { Asset } from '../../assets/models/asset.model';
+import Gender from '../enums/gender.enum';
 
 @ObjectType()
 export class User {
@@ -23,6 +24,12 @@ export class User {
 
   @Field()
   balance: number;
+
+  @Field(() => GraphQLISODateTime)
+  birthDate: Date;
+
+  @Field(() => Gender)
+  gender: Gender;
 
   @Field(() => [Asset])
   assets?: Asset[];

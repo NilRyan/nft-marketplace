@@ -1,5 +1,5 @@
-import { PaginatedAssets } from './models/paginated-assets.model';
-import { PaginationArgs } from '../common/pagination-filtering/pagination.args';
+import { PaginatedAssets } from '../models/paginated-assets.model';
+import { PaginationArgs } from '../../common/pagination-filtering/pagination.args';
 import { UseGuards } from '@nestjs/common';
 import {
   Args,
@@ -11,16 +11,16 @@ import {
   Parent,
 } from '@nestjs/graphql';
 
-import { CommentsService } from './../comments/services/comments.service';
-import { AssetsService } from './assets.service';
-import { CreateAssetInput } from './dto/create-asset.input';
-import { Asset } from './models/asset.model';
-import Role from '../auth/enums/role.enum';
-import { GetUser } from '../auth/get-user.decorator';
-import { GqlAuthGuard } from '../auth/guards/graphql-jwt-auth.guard';
-import RoleGuard from '../auth/guards/role.guards';
-import { AssetSearchArgs } from '../common/pagination-filtering/asset-search.args';
-import { UserEntity } from '../users/entities/user.entity';
+import { CommentsService } from '../../comments/services/comments.service';
+import { AssetsService } from '../services/assets.service';
+import { CreateAssetInput } from '../dto/create-asset.input';
+import { Asset } from '../models/asset.model';
+import Role from '../../auth/enums/role.enum';
+import { GetCurrentUser } from '../../auth/decorators/get-current-user.decorator';
+import { GqlAuthGuard } from '../../auth/guards/graphql-jwt-auth.guard';
+import RoleGuard from '../../auth/guards/role.guards';
+import { AssetSearchArgs } from '../../common/pagination-filtering/asset-search.args';
+import { UserEntity } from '../../users/entities/user.entity';
 @UseGuards(GqlAuthGuard)
 @Resolver((of) => Asset)
 export class AssetResolver {
@@ -37,7 +37,7 @@ export class AssetResolver {
   @Mutation(() => Asset)
   createAsset(
     @Args('createAssetInput') createAssetInput: CreateAssetInput,
-    @GetUser() user: UserEntity,
+    @GetCurrentUser() user: UserEntity,
   ) {
     return this.assetsService.createAsset(createAssetInput, user);
   }
@@ -63,7 +63,7 @@ export class AssetResolver {
   @Mutation(() => Asset)
   async deleteAsset(
     @Args('id', { type: () => ID }) assetId: string,
-    @GetUser() user: UserEntity,
+    @GetCurrentUser() user: UserEntity,
   ) {
     return await this.assetsService.removeAsset(assetId, user);
   }

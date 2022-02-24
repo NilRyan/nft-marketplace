@@ -1,6 +1,6 @@
 import { UnauthorizedException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { AssetsService } from '../../assets/assets.service';
+import { AssetsService } from '../../assets/services/assets.service';
 import { AssetNotFoundException } from '../../assets/exceptions/asset-not-found.exception';
 import { UserEntity } from '../../users/entities/user.entity';
 import { CreateCommentInput } from '../dto/create-comment.input';

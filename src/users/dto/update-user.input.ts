@@ -1,4 +1,9 @@
-import { Field, InputType, PartialType } from '@nestjs/graphql';
+import {
+  Field,
+  GraphQLISODateTime,
+  InputType,
+  PartialType,
+} from '@nestjs/graphql';
 import {
   IsAlphanumeric,
   Length,
@@ -6,7 +11,9 @@ import {
   IsEmail,
   MaxLength,
   IsOptional,
+  IsDate,
 } from 'class-validator';
+import Gender from '../enums/gender.enum';
 
 @InputType()
 export class UpdateUserInput {
@@ -36,4 +43,13 @@ export class UpdateUserInput {
   @IsOptional()
   @Length(1, 1000)
   aboutMe?: string;
+
+  @Field(() => GraphQLISODateTime, { nullable: true })
+  @IsDate()
+  @IsOptional()
+  birthDate?: Date;
+
+  @Field(() => Gender, { nullable: true })
+  @IsOptional()
+  gender?: Gender;
 }

@@ -4,7 +4,7 @@ import { CreateCommentInput } from '../dto/create-comment.input';
 import { UpdateCommentInput } from '../dto/update-comment.input';
 import { CommentNotFoundException } from '../exceptions/comment-not-found.exception';
 import { CommentsRepository } from '../repositories/comments.repository';
-import { AssetsService } from '../../assets/assets.service';
+import { AssetsService } from '../../assets/services/assets.service';
 import { PaginationArgs } from '../../common/pagination-filtering/pagination.args';
 import { UserEntity } from '../../users/entities/user.entity';
 import { CommentEntity } from '../entities/comment.entity';

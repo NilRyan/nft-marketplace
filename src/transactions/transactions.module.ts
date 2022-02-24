@@ -7,7 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TransactionsResolver } from './resolvers/transactions.resolver';
 import { TransactionsService } from './services/transactions.service';
 import { AssetsModule } from '../assets/assets.module';
-import { AssetsRepository } from '../assets/assets.repository';
+import { AssetsRepository } from '../assets/repositories/assets.repository';
 
 @Module({
   imports: [

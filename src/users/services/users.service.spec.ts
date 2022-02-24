@@ -2,7 +2,7 @@ import { UserNotFoundException } from './../exceptions/user-not-found.exception'
 import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import Role from '../../auth/enums/role.enum';
-import PostgresErrorCode from '../../database/postgres-error-code.enum';
+import PostgresErrorCode from '../../database/enums/postgres-error-code.enum';
 import { UserEntity } from '../entities/user.entity';
 import { UsersRepository } from '../repositories/users.repository';
 import { UsersService } from './users.service';

@@ -1,7 +1,7 @@
 
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { GetUser } from '../../auth/get-user.decorator';
+import { GetCurrentUser } from '../../auth/decorators/get-current-user.decorator';
 import { GqlAuthGuard } from '../../auth/guards/graphql-jwt-auth.guard';
 import { UserEntity } from '../../users/entities/user.entity';
 
@@ -18,7 +18,7 @@ export class CommentsResolver {
   @Mutation(() => Comment)
   createComment(
     @Args('createCommentInput') createCommentInput: CreateCommentInput,
-    @GetUser() user: UserEntity,
+    @GetCurrentUser() user: UserEntity,
   ) {
     return this.commentsService.createComment(createCommentInput, user);
   }
@@ -26,7 +26,7 @@ export class CommentsResolver {
   @Mutation(() => Comment)
   async updateComment(
     @Args('updateCommentInput') updateCommentInput: UpdateCommentInput,
-    @GetUser() user: UserEntity,
+    @GetCurrentUser() user: UserEntity,
   ) {
     return await this.commentsService.updateComment(updateCommentInput, user);
   }
@@ -34,7 +34,7 @@ export class CommentsResolver {
   @Mutation(() => Comment)
   async deleteComment(
     @Args('commentId', { type: () => String }) commentId: string,
-    @GetUser() user: UserEntity,
+    @GetCurrentUser() user: UserEntity,
   ) {
     return await this.commentsService.deleteComment(commentId, user);
   }

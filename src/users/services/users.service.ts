@@ -9,9 +9,9 @@ import { UpdateUserInput } from '../dto/update-user.input';
 import { UserEntity } from '../entities/user.entity';
 import { UsersRepository } from '../repositories/users.repository';
 import { WalletsService } from './wallets.service';
-import { RegisterUserInput } from '../../auth/dto/register-user.input';
+import { RegisterUserInput } from '../dto/register-user.input';
 import Role from '../../auth/enums/role.enum';
-import PostgresErrorCode from '../../database/postgres-error-code.enum';
+import PostgresErrorCode from '../../database/enums/postgres-error-code.enum';
 
 @Injectable()
 export class UsersService {

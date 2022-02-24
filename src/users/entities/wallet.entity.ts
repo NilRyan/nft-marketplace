@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
   RelationId,
 } from 'typeorm';
-import { BaseModel } from '../../common/entities/base.entity';
+import { BaseModel } from '../../common/models/base.model';
 import Coin from '../enums/coin.enum';
 import { UserEntity } from './user.entity';
 

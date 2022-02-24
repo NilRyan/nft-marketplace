@@ -1,11 +1,13 @@
 import {
-  IsAlpha,
   IsAlphanumeric,
+  IsDate,
   IsEmail,
+  IsOptional,
   Length,
   MaxLength,
 } from 'class-validator';
-import { InputType, Field } from '@nestjs/graphql';
+import { InputType, Field, GraphQLISODateTime } from '@nestjs/graphql';
+import Gender from '../enums/gender.enum';
 
 @InputType()
 export class RegisterUserInput {
@@ -31,4 +33,11 @@ export class RegisterUserInput {
   @IsAlphanumeric()
   @Length(6, 20)
   password: string;
+
+  @Field(() => GraphQLISODateTime, { nullable: true })
+  @IsDate()
+  birthDate: Date;
+
+  @Field(() => Gender, { nullable: true })
+  gender?: Gender;
 }

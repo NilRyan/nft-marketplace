@@ -10,7 +10,8 @@ import {
 } from 'typeorm';
 import { AssetEntity } from '../../assets/entities/asset.entity';
 import Role from '../../auth/enums/role.enum';
-import { BaseModel } from '../../common/entities/base.entity';
+import { BaseModel } from '../../common/models/base.model';
+import Gender from '../enums/gender.enum';
 import { WalletEntity } from './wallet.entity';
 
 @Entity('users')
@@ -36,6 +37,14 @@ export class UserEntity extends BaseModel {
 
   @Column()
   lastName: string;
+  @Column({ type: 'date' })
+  birthDate: Date;
+
+  @Column({
+    type: 'enum',
+    enum: Gender,
+  })
+  gender: Gender;
 
   @OneToMany(() => AssetEntity, (asset) => asset.owner)
   assets?: AssetEntity[];
