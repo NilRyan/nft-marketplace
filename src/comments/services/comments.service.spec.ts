@@ -219,7 +219,7 @@ describe('Comments Service', () => {
           offset: 10,
           orderBy: {
             field: 'createdAt',
-            sortOrder: 'DESC',
+            direction: 'DESC',
           },
         },
       );

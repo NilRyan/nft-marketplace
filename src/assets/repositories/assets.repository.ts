@@ -23,7 +23,7 @@ export class AssetsRepository extends Repository<AssetEntity> {
   }
   async getAssets(assetSearchArgs: AssetSearchArgs) {
     const { searchTerm, limit, offset, orderBy } = assetSearchArgs;
-    const { field, sortOrder } = orderBy;
+    const { field, direction: sortOrder } = orderBy;
     const [assets, count] = await this.findAndCount({
       where: [
         { title: ILike(`%${searchTerm}%`) },

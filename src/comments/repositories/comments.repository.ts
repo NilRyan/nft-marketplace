@@ -1,6 +1,6 @@
 import { UpdateCommentInput } from './../dto/update-comment.input';
 import { AssetEntity } from 'src/assets/entities/asset.entity';
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, In, Repository } from 'typeorm';
 import { UserEntity } from '../../users/entities/user.entity';
 import { CreateCommentInput } from '../dto/create-comment.input';
 import { CommentEntity } from '../entities/comment.entity';
@@ -30,12 +30,19 @@ export class CommentsRepository extends Repository<CommentEntity> {
     });
   }
 
+  async getCommentsByAssetIds(assetIds: string[]) {
+    return await this.find({
+      where: {
+        assetId: In(assetIds),
+      },
+    });
+  }
   async getPaginatedCommentsForAsset(
     assetId: string,
     pagination: PaginationArgs,
   ) {
     const { limit, offset, orderBy } = pagination;
-    const { field, sortOrder } = orderBy as unknown as OrderBy;
+    const { field, direction: sortOrder } = orderBy as unknown as OrderBy;
     const [comments, count] = await this.findAndCount({
       where: {
         asset: {

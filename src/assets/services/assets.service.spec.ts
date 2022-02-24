@@ -104,7 +104,7 @@ describe('Assets Service', () => {
         offset: 0,
         orderBy: {
           field: 'title',
-          sortOrder: 'ASC',
+          direction: 'ASC',
         },
         searchTerm: 'test',
       };

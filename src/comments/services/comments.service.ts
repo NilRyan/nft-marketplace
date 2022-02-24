@@ -31,7 +31,9 @@ export class CommentsService {
       asset,
     );
   }
-
+  async getCommentsByAssetIds(assetIds: string[]) {
+    return await this.commentRepository.getCommentsByAssetIds(assetIds);
+  }
   async getPaginatedCommentsForAsset(
     assetId: string,
     pagination: PaginationArgs,

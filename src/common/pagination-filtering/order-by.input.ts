@@ -7,5 +7,5 @@ export class OrderBy {
   @Field({ nullable: true, defaultValue: 'createdAt' })
   field?: string;
   @Field({ nullable: true, defaultValue: Direction.DESC })
-  sortOrder?: Direction;
+  direction?: Direction;
 }
