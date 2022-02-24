@@ -13,10 +13,12 @@ export default registerAs('database', () => {
     database: process.env.POSTGRES_DB,
     autoLoadEntities: true,
     synchronize: process.env.MODE === 'dev',
-    entities: [__dirname + '/**/*.entity{.ts,.js}'],
-    migrations: [__dirname + '/src/database/migrations/*{.ts,.js}'],
+    entities: ['src/**/**/*.entity{.ts,.js}'],
+    migrations: [__dirname + '/database/migrations/*{.ts,.js}'],
     cli: {
       migrationsDir: 'src/database/migrations',
     },
+    seeds: ['src/database/seeding/seeds/*{.ts,.js}'],
+    factories: ['src/database/seeding/factories/*{.ts,.js}'],
   };
 });

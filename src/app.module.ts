@@ -48,7 +48,9 @@ import databaseConfig from './database/database.config';
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({...configService.get('database')}),
+      useFactory: (configService: ConfigService) => ({
+        ...configService.get('database'),
+      }),
     }),
     UsersModule,
     CommentsModule,
