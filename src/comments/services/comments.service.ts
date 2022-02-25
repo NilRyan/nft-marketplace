@@ -14,7 +14,7 @@ import { PaginationInfo } from '../../common/pagination-filtering/pagination-inf
 
 @Injectable()
 export class CommentsService {
-  private readonly logger = new Logger(CommentsService.name);
+
   constructor(
     private readonly commentRepository: CommentsRepository,
     private readonly assetsService: AssetsService,
@@ -42,13 +42,12 @@ export class CommentsService {
       assetIds,
     );
     // this.logger.log(comments);
-    this.logger.log(paginationArgs.limit);
+
     const commentsByAssetId = this.groupCommentsByAssetId(comments);
     const paginatedComments = this.paginateComments(
       commentsByAssetId,
       paginationArgs,
     );
-    this.logger.log(paginatedComments);
     return paginatedComments;
   }
   async getPaginatedCommentsForAsset(
@@ -105,7 +104,7 @@ export class CommentsService {
   ): { [key: string]: CommentEntity[] } {
     const { limit, offset, orderBy } = paginationArgs;
     const { direction } = orderBy;
-    const paginatedComments = {};
+    const paginatedCommentsOutput = {};
 
     const dateSorter = (a: CommentEntity, b: CommentEntity) => {
       if (direction === Direction.ASC) {
@@ -130,13 +129,13 @@ export class CommentsService {
         limit,
         offset,
       };
-      paginatedComments[assetId] = {
+      paginatedCommentsOutput[assetId] = {
         paginationInfo,
-        paginatedComments,
+        comments: paginatedComments,
       };
+  
     });
-
-    return paginatedComments;
+    return paginatedCommentsOutput;
   }
 
   private groupCommentsByAssetId(comments: CommentEntity[]): {
