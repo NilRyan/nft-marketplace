@@ -1,5 +1,5 @@
 import { OrderBy } from '../../common/pagination-filtering/order-by.input';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { CreateCommentInput } from '../dto/create-comment.input';
 import { UpdateCommentInput } from '../dto/update-comment.input';
 import { CommentNotFoundException } from '../exceptions/comment-not-found.exception';
@@ -9,9 +9,12 @@ import { PaginationArgs } from '../../common/pagination-filtering/pagination.arg
 import { UserEntity } from '../../users/entities/user.entity';
 import { CommentEntity } from '../entities/comment.entity';
 import { AssetNotFoundException } from '../../assets/exceptions/asset-not-found.exception';
+import Direction from '../../common/pagination-filtering/enums/direction.enums';
+import { PaginationInfo } from '../../common/pagination-filtering/pagination-info.output';
 
 @Injectable()
 export class CommentsService {
+  private readonly logger = new Logger(CommentsService.name);
   constructor(
     private readonly commentRepository: CommentsRepository,
     private readonly assetsService: AssetsService,
@@ -31,8 +34,22 @@ export class CommentsService {
       asset,
     );
   }
-  async getCommentsByAssetIds(assetIds: string[]) {
-    return await this.commentRepository.getCommentsByAssetIds(assetIds);
+  async getCommentsByAssetIds(
+    assetIds: string[],
+    paginationArgs: PaginationInfo,
+  ) {
+    const comments = await this.commentRepository.getCommentsByAssetIds(
+      assetIds,
+    );
+    // this.logger.log(comments);
+    this.logger.log(paginationArgs.limit);
+    const commentsByAssetId = this.groupCommentsByAssetId(comments);
+    const paginatedComments = this.paginateComments(
+      commentsByAssetId,
+      paginationArgs,
+    );
+    this.logger.log(paginatedComments);
+    return paginatedComments;
   }
   async getPaginatedCommentsForAsset(
     assetId: string,
@@ -78,5 +95,62 @@ export class CommentsService {
         `You can't update comment with id: ${comment.id}`,
       );
     }
+  }
+
+  private paginateComments(
+    groupedComments: {
+      [key: string]: CommentEntity[];
+    },
+    paginationArgs: PaginationArgs,
+  ): { [key: string]: CommentEntity[] } {
+    const { limit, offset, orderBy } = paginationArgs;
+    const { direction } = orderBy;
+    const paginatedComments = {};
+
+    const dateSorter = (a: CommentEntity, b: CommentEntity) => {
+      if (direction === Direction.ASC) {
+        return a.createdAt.getTime() - b.createdAt.getTime();
+      }
+      if (direction === Direction.DESC) {
+        return b.createdAt.getTime() - a.createdAt.getTime();
+      }
+    };
+
+    Object.keys(groupedComments).forEach((assetId) => {
+      const paginationLimit =
+        groupedComments[assetId].length - offset > limit
+          ? limit
+          : groupedComments[assetId].length - offset;
+
+      const paginatedComments = groupedComments[assetId]
+        .sort(dateSorter)
+        .slice(offset, paginationLimit);
+      const paginationInfo: PaginationInfo = {
+        total: groupedComments[assetId].length,
+        limit,
+        offset,
+      };
+      paginatedComments[assetId] = {
+        paginationInfo,
+        paginatedComments,
+      };
+    });
+
+    return paginatedComments;
+  }
+
+  private groupCommentsByAssetId(comments: CommentEntity[]): {
+    [key: string]: CommentEntity[];
+  } {
+    const commentsByAssetId = {};
+
+    comments.forEach((comment) => {
+      if (!commentsByAssetId[comment.assetId]) {
+        commentsByAssetId[comment.assetId] = [];
+      }
+      commentsByAssetId[comment.assetId].push(comment);
+    });
+
+    return commentsByAssetId;
   }
 }

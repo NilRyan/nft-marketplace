@@ -21,12 +21,14 @@ import { GqlAuthGuard } from '../../auth/guards/graphql-jwt-auth.guard';
 import RoleGuard from '../../auth/guards/role.guards';
 import { AssetSearchArgs } from '../../common/pagination-filtering/asset-search.args';
 import { UserEntity } from '../../users/entities/user.entity';
+import { CommentsLoader } from '../../comments/loaders/comments.loader';
 @UseGuards(GqlAuthGuard)
 @Resolver((of) => Asset)
 export class AssetResolver {
   constructor(
     private readonly assetsService: AssetsService,
     private readonly commentsService: CommentsService,
+    private readonly commentsLoader: CommentsLoader,
   ) {}
 
   /*
@@ -54,10 +56,13 @@ export class AssetResolver {
 
   @ResolveField('comments')
   async comments(@Parent() asset: Asset, @Args() args: PaginationArgs) {
-    return await this.commentsService.getPaginatedCommentsForAsset(
-      asset.id,
-      args,
-    );
+    // return await this.commentsService.getPaginatedCommentsForAsset(
+    //   asset.id,
+    //   args,
+    // );
+    return await this.commentsLoader
+      .getPaginatedCommentsForAsset(args)
+      .load(asset.id);
   }
 
   @Mutation(() => Asset)

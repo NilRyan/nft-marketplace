@@ -4,8 +4,8 @@ import { Asset } from './asset.model';
 
 @ObjectType()
 export class PaginatedAssets {
-  @Field()
-  paginationInfo: PaginationInfo;
+  @Field({ nullable: true })
+  paginationInfo?: PaginationInfo;
 
   @Field(() => [Asset])
   assets: [Asset];

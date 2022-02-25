@@ -11,6 +11,7 @@ import { WalletsResolver } from './users/resolvers/wallets.resolver';
 import { TransactionsModule } from './transactions/transactions.module';
 import { AssetsModule } from './assets/assets.module';
 import databaseConfig from './database/database.config';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 /* TODO: 
     1. Add PostgreSQL and TypeORM // done

@@ -4,9 +4,11 @@ import { PaginationInfo } from '../../common/pagination-filtering/pagination-inf
 
 @ObjectType()
 export class PaginatedComments {
-  @Field((type) => PaginationInfo)
-  paginationInfo: PaginationInfo;
+  @Field((type) => PaginationInfo, {
+    nullable: true,
+  })
+  paginationInfo?: PaginationInfo;
 
-  @Field((type) => [Comment])
-  comments: [Comment];
+  @Field((type) => [Comment], { nullable: true })
+  comments?: [Comment];
 }

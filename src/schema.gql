@@ -42,8 +42,8 @@ type PaginationInfo {
 }
 
 type PaginatedComments {
-  paginationInfo: PaginationInfo!
-  comments: [Comment!]!
+  paginationInfo: PaginationInfo
+  comments: [Comment!]
 }
 
 type Asset {
@@ -59,12 +59,12 @@ type Asset {
   creatorId: String!
   owner: UserProfileOutput!
   ownerId: String!
-  comments(limit: Float = 10, offset: Float = 0, orderBy: OrderBy = {field: "createdAt", sortOrder: "DESC"}): PaginatedComments
+  comments(limit: Float = 10, offset: Float = 0, orderBy: OrderBy = {field: "createdAt"}): PaginatedComments
 }
 
 input OrderBy {
   field: String = "createdAt"
-  sortOrder: String = "DESC"
+  direction: String = "DESC"
 }
 
 type User {
@@ -81,7 +81,7 @@ type User {
 }
 
 type PaginatedAssets {
-  paginationInfo: PaginationInfo!
+  paginationInfo: PaginationInfo
   assets: [Asset!]!
 }
 
@@ -119,7 +119,7 @@ type TransactionOutput {
 type Query {
   viewWallet: WalletOutput!
   getUserProfile(id: String!): UserProfileOutput!
-  getAllAssets(limit: Float = 10, offset: Float = 0, orderBy: OrderBy = {field: "createdAt", sortOrder: "DESC"}, searchTerm: String!): PaginatedAssets!
+  getAllAssets(limit: Float = 10, offset: Float = 0, orderBy: OrderBy = {field: "createdAt"}, searchTerm: String!): PaginatedAssets!
   getAssetById(assetId: ID!): Asset!
   login(loginInput: LoginInput!): AccessTokenOutput!
   viewTransactions: [TransactionOutput!]!

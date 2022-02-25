@@ -31,11 +31,14 @@ export class CommentsRepository extends Repository<CommentEntity> {
   }
 
   async getCommentsByAssetIds(assetIds: string[]) {
-    return await this.find({
+    const comments = await this.find({
       where: {
-        assetId: In(assetIds),
+        asset: {
+          id: In(assetIds),
+        },
       },
     });
+    return comments;
   }
   async getPaginatedCommentsForAsset(
     assetId: string,

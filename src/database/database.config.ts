@@ -5,7 +5,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 export default registerAs('database', () => {
   return {
     type: 'postgres',
-    namingStragegy: new SnakeNamingStrategy(),
+    // namingStragegy: new SnakeNamingStrategy(),
     logging: true,
     host: process.env.POSTGRES_HOST,
     port: process.env.POSTGRES_PORT,
@@ -13,7 +13,7 @@ export default registerAs('database', () => {
     password: process.env.POSTGRES_PASSWORD,
     database: process.env.POSTGRES_DB,
     autoLoadEntities: true,
-    synchronize: process.env.MODE === 'dev',
+    synchronize: true,
     entities: [join(__dirname, '..', '/**/**/*.entity{.ts,.js}')],
     migrations: [__dirname + '/database/migrations/*{.ts,.js}'],
     cli: {

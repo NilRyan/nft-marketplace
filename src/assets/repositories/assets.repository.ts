@@ -6,8 +6,8 @@ import { AssetSearchArgs } from '../../common/pagination-filtering/asset-search.
 
 @EntityRepository(AssetEntity)
 export class AssetsRepository extends Repository<AssetEntity> {
-  async getAssetAndOwner(assetId: string): Promise<AssetEntity> {
-    return await this.findOne(assetId, {
+  async getAssetAndOwner(id: string): Promise<AssetEntity> {
+    return await this.findOne(id, {
       relations: ['owner', 'owner.wallet'],
     });
   }
