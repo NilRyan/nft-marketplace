@@ -7,6 +7,7 @@ import { UserEntity } from '../entities/user.entity';
 import { UsersRepository } from '../repositories/users.repository';
 import { UsersService } from './users.service';
 import { WalletsService } from './wallets.service';
+import Gender from '../enums/gender.enum';
 
 const mockUsersRepository = () => ({
   createUser: jest.fn(),
@@ -62,6 +63,8 @@ describe('Users Service', () => {
         lastName: 'test',
         email: 'test@gmail.com',
         password: 'testPassword123',
+        birthDate: new Date(),
+        gender: Gender.Male,
       };
       usersRepository.createUser.mockResolvedValue(mockUserEntity);
       walletsService.createWallet.mockResolvedValue({

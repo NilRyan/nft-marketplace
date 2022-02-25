@@ -8,6 +8,7 @@ import { AssetsService } from './assets.service';
 import { CreateAssetInput } from '../dto/create-asset.input';
 import { AssetEntity } from '../entities/asset.entity';
 import { AssetNotFoundException } from '../exceptions/asset-not-found.exception';
+import Direction from '../../common/pagination-filtering/enums/direction.enums';
 
 const mockAssetsRepository = () => ({
   createAsset: jest.fn(),
@@ -104,7 +105,7 @@ describe('Assets Service', () => {
         offset: 0,
         orderBy: {
           field: 'title',
-          direction: 'ASC',
+          direction: Direction.ASC,
         },
         searchTerm: 'test',
       };

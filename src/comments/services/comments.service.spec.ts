@@ -7,6 +7,7 @@ import { CreateCommentInput } from '../dto/create-comment.input';
 import { CommentNotFoundException } from '../exceptions/comment-not-found.exception';
 import { CommentsRepository } from '../repositories/comments.repository';
 import { CommentsService } from './comments.service';
+import Direction from '../../common/pagination-filtering/enums/direction.enums';
 
 const mockCommentsRepository = () => ({
   findOne: jest.fn(),
@@ -219,7 +220,7 @@ describe('Comments Service', () => {
           offset: 10,
           orderBy: {
             field: 'createdAt',
-            direction: 'DESC',
+            direction: Direction.DESC,
           },
         },
       );

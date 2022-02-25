@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { LoginInput } from '../dto/login.input';
 import PostgresErrorCode from '../../database/enums/postgres-error-code.enum';
+import Gender from '../../users/enums/gender.enum';
 
 const mockConfigService = () => ({
   get(key: string) {
@@ -66,6 +67,8 @@ describe('Authentication Service', () => {
         firstName: 'Philip',
         lastName: 'Calape',
         email: 'randomemail@gmail.com',
+        birthDate: new Date(),
+        gender: Gender.Male,
       };
       const expectedUser = { ...registrationData };
       usersService.createUserWithWallet.mockResolvedValue(expectedUser);
