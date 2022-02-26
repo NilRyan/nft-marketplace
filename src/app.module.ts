@@ -12,6 +12,7 @@ import { TransactionsModule } from './transactions/transactions.module';
 import { AssetsModule } from './assets/assets.module';
 import databaseConfig from './database/database.config';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { ComplexityPlugin } from './common/plugins/complexity.plugin';
 
 /* TODO: 
     1. Add PostgreSQL and TypeORM // done
@@ -60,6 +61,6 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
     TransactionsModule,
   ],
   controllers: [],
-  providers: [WalletsResolver],
+  providers: [WalletsResolver, ComplexityPlugin],
 })
 export class AppModule {}
