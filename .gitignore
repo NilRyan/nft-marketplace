@@ -39,6 +39,3 @@ lerna-debug.log*
 
 # Docker
 data
-
-# Typeorm
-ormconfig.ts
