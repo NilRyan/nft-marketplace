@@ -1,10 +1,11 @@
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException, ForbiddenException } from '@nestjs/common';
 import * as currency from 'currency.js';
 import Role from '../../auth/enums/role.enum';
 import { AssetSearchArgs } from '../../common/pagination-filtering/asset-search.args';
 import { UserEntity } from '../../users/entities/user.entity';
 import { CreateAssetInput } from '../dto/create-asset.input';
 import { AssetEntity } from '../entities/asset.entity';
+import { AssetNotDeletedException } from '../exceptions/asset-not-deleted.exception';
 import { AssetNotFoundException } from '../exceptions/asset-not-found.exception';
 import { AssetsRepository } from '../repositories/assets.repository';
 
@@ -64,9 +65,11 @@ export class AssetsService {
       withDeleted: true,
       relations: ['owner'],
     });
-    await this.assetRepository.restore(id);
     if (!asset) throw new AssetNotFoundException(id);
-
+    if (asset.deletedAt === null) {
+      throw new AssetNotDeletedException(id);
+    }
+    await this.assetRepository.restore(id);
     return asset;
   }
 }
