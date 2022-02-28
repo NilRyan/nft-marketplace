@@ -4,7 +4,7 @@ Built with NestJS, TypeScript, PostgreSQL
 
 ## Description
 ### ER Diagram
-  ![ERD_nft](https://user-images.githubusercontent.com/76242678/155319398-00c95d0d-a70f-4781-bc07-a3fd77816bce.png)
+  ![ERD_nft](https://user-images.githubusercontent.com/76242678/155911278-3af075d0-aac7-4424-ac32-01b09c896ce7.png)
 
 
 ## Installation
