@@ -14,7 +14,6 @@ import { PaginationInfo } from '../../common/pagination-filtering/pagination-inf
 
 @Injectable()
 export class CommentsService {
-
   constructor(
     private readonly commentRepository: CommentsRepository,
     private readonly assetsService: AssetsService,
@@ -133,7 +132,6 @@ export class CommentsService {
         paginationInfo,
         comments: paginatedComments,
       };
-  
     });
     return paginatedCommentsOutput;
   }

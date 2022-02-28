@@ -37,6 +37,7 @@ export class CommentsRepository extends Repository<CommentEntity> {
           id: In(assetIds),
         },
       },
+      relations: ['author', 'asset'],
     });
     return comments;
   }

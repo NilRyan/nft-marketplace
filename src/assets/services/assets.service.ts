@@ -60,7 +60,10 @@ export class AssetsService {
   }
 
   async restoreDeletedAsset(id: string) {
-    const asset = await this.assetRepository.find({ where: { id } });
+    const asset = await this.assetRepository.findOne(id, {
+      withDeleted: true,
+      relations: ['owner'],
+    });
     await this.assetRepository.restore(id);
     if (!asset) throw new AssetNotFoundException(id);
 
