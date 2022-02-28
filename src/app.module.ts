@@ -11,7 +11,6 @@ import { WalletsResolver } from './users/resolvers/wallets.resolver';
 import { TransactionsModule } from './transactions/transactions.module';
 import { AssetsModule } from './assets/assets.module';
 import databaseConfig from './database/database.config';
-import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { ComplexityPlugin } from './common/plugins/complexity.plugin';
 
 /* TODO: 
