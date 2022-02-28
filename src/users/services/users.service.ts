@@ -1,3 +1,4 @@
+import { AssetsRepository } from './../../assets/repositories/assets.repository';
 import { UserNotFoundException } from './../exceptions/user-not-found.exception';
 import {
   Injectable,
@@ -12,6 +13,7 @@ import { WalletsService } from './wallets.service';
 import { RegisterUserInput } from '../dto/register-user.input';
 import Role from '../../auth/enums/role.enum';
 import PostgresErrorCode from '../../database/enums/postgres-error-code.enum';
+import { UserNotDeletedException } from '../exceptions/user-not-deleted.exception';
 
 @Injectable()
 export class UsersService {
@@ -19,6 +21,7 @@ export class UsersService {
 
   constructor(
     private readonly userRepository: UsersRepository,
+    private readonly assetsRepository: AssetsRepository,
     private readonly walletsService: WalletsService,
   ) {}
 
@@ -59,13 +62,18 @@ export class UsersService {
   }
 
   async deleteUser(userId: string, user: UserEntity) {
+    const assets = await this.assetsRepository.find({
+      where: { owner: userId },
+    });
     if (user.id === userId) {
-      await this.userRepository.softDelete(userId);
+      await this.userRepository.softRemove(assets);
+      await this.assetsRepository.softRemove(assets);
       return user;
     } else if (user.role === Role.Admin) {
       const userToDelete = await this.userRepository.findOne(userId);
       if (!userToDelete) throw new UserNotFoundException(userId);
       await this.userRepository.softDelete(userId);
+      await this.assetsRepository.softRemove(assets);
       return userToDelete;
     }
     throw new UnauthorizedException(`You can't delete user with id: ${userId}`);
@@ -75,8 +83,18 @@ export class UsersService {
     const deletedUser = await this.userRepository.findOne(userId, {
       withDeleted: true,
     });
+
     if (!deletedUser) throw new UserNotFoundException(userId);
+    if (deletedUser.deletedAt === null) {
+      throw new UserNotDeletedException(userId);
+    }
+    const assets = await this.assetsRepository.find({
+      where: { owner: userId },
+      withDeleted: true,
+    });
+    const assetIds = assets.map((asset) => asset.id);
     await this.userRepository.restore(userId);
+    await this.assetsRepository.restore(assetIds);
 
     return deletedUser;
   }

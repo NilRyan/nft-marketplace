@@ -28,11 +28,11 @@ export class Asset {
   @Field({ nullable: true })
   category?: string;
 
-  @Field(() => UserProfileOutput)
-  creator: UserProfileOutput;
+  @Field(() => UserProfileOutput, { nullable: true })
+  creator?: UserProfileOutput;
 
-  @Field()
-  creatorId: string;
+  @Field({ nullable: true })
+  creatorId?: string;
 
   @Field((type) => UserProfileOutput)
   owner: UserProfileOutput;

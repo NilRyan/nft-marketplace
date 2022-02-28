@@ -46,7 +46,9 @@ export class UserEntity extends BaseModel {
   })
   gender: Gender;
 
-  @OneToMany(() => AssetEntity, (asset) => asset.owner)
+  @OneToMany(() => AssetEntity, (asset) => asset.owner, {
+    cascade: true,
+  })
   assets?: AssetEntity[];
 
   @OneToOne(() => WalletEntity)

@@ -55,8 +55,8 @@ type Asset {
   lastSale: String
   createdAt: DateTime!
   category: String
-  creator: UserProfileOutput!
-  creatorId: String!
+  creator: UserProfileOutput
+  creatorId: String
   owner: UserProfileOutput!
   ownerId: String!
   comments(limit: Float = 10, offset: Float = 0, orderBy: OrderBy = {field: "createdAt"}): PaginatedComments
