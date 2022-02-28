@@ -4,7 +4,7 @@
   "description": "",
   "author": "",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "GNU GENERAL PUBLIC LICENSE",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
