@@ -1,3 +1,4 @@
+import { AssetsRepository } from './../../assets/repositories/assets.repository';
 import { UserNotFoundException } from './../exceptions/user-not-found.exception';
 import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
@@ -14,12 +15,20 @@ const mockUsersRepository = () => ({
   save: jest.fn(),
   findOne: jest.fn(),
   update: jest.fn(),
-  softDelete: jest.fn(),
+  softRemove: jest.fn(),
   restore: jest.fn(),
+  softDelete: jest.fn(),
 });
 
 const mockWalletsService = () => ({
   createWallet: jest.fn(),
+});
+
+const mockAssetsRepository = () => ({
+  findOne: jest.fn(),
+  find: jest.fn(),
+  softRemove: jest.fn(),
+  restore: jest.fn(),
 });
 
 const mockUserEntity = {
@@ -35,11 +44,16 @@ describe('Users Service', () => {
   let usersService: UsersService;
   let usersRepository;
   let walletsService;
+  let assetsRepository;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [
         UsersService,
+        {
+          provide: AssetsRepository,
+          useFactory: mockAssetsRepository,
+        },
         {
           provide: UsersRepository,
           useFactory: mockUsersRepository,
@@ -53,6 +67,7 @@ describe('Users Service', () => {
     usersService = module.get(UsersService);
     usersRepository = module.get(UsersRepository);
     walletsService = module.get(WalletsService);
+    assetsRepository = module.get(AssetsRepository);
   });
 
   describe('createUserWithWallet', () => {
@@ -161,6 +176,7 @@ describe('Users Service', () => {
         mockUserEntity,
       );
       expect(usersRepository.softDelete).toHaveBeenCalledWith('mock-user-id');
+      expect(assetsRepository.softRemove).toHaveBeenCalled();
       expect(actualUser).toEqual(mockUserEntity);
     });
     it('throws a UserNotFoundException if user does not exist and user role is admin', async () => {
@@ -168,7 +184,7 @@ describe('Users Service', () => {
       expect(
         usersService.deleteUser('testUserId', mockUserEntity),
       ).rejects.toThrow(UserNotFoundException);
-      expect(usersRepository.softDelete).not.toHaveBeenCalled();
+      expect(usersRepository.softRemove).not.toHaveBeenCalled();
     });
     it('throws a ForbiddenException if user role is not admin or user does not own account', async () => {
       expect(
@@ -177,12 +193,13 @@ describe('Users Service', () => {
           role: Role.User,
         }),
       ).rejects.toThrow(UnauthorizedException);
-      expect(usersRepository.softDelete).not.toHaveBeenCalled();
+      expect(usersRepository.softRemove).not.toHaveBeenCalled();
     });
   });
   describe('restoreUser', () => {
     it('restores the deleted user and returns it', async () => {
       usersRepository.findOne.mockResolvedValue(mockUserEntity);
+      assetsRepository.find.mockResolvedValue([]);
       const actualUser = await usersService.restoreDeletedUser(
         mockUserEntity.id,
       );

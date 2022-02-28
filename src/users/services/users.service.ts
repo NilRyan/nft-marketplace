@@ -66,7 +66,7 @@ export class UsersService {
       where: { owner: userId },
     });
     if (user.id === userId) {
-      await this.userRepository.softRemove(assets);
+      await this.userRepository.softDelete(userId);
       await this.assetsRepository.softRemove(assets);
       return user;
     } else if (user.role === Role.Admin) {
