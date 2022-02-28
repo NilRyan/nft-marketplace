@@ -262,7 +262,7 @@ describe('Assets Service', () => {
         owner: user,
         ownerId: user.id,
       } as AssetEntity;
-      assetsRepository.find.mockResolvedValue(asset);
+      assetsRepository.findOne.mockResolvedValue(asset);
       const actualAsset = await assetsService.restoreDeletedAsset(asset.id);
       expect(assetsRepository.restore).toHaveBeenCalledWith(asset.id);
       expect(actualAsset).toEqual(asset);
