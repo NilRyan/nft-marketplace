@@ -1,4 +1,9 @@
-import { Injectable, Logger, UnauthorizedException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  UnauthorizedException,
+  ForbiddenException,
+} from '@nestjs/common';
 import * as currency from 'currency.js';
 import Role from '../../auth/enums/role.enum';
 import { AssetSearchArgs } from '../../common/pagination-filtering/asset-search.args';

@@ -7,7 +7,7 @@ type UserProfileOutput {
   username: String!
   email: String!
   aboutMe: String
-  birthDate: DateTime!
+  birthDate: DateTime
   gender: Gender!
   firstName: String!
   lastName: String!
@@ -27,8 +27,8 @@ enum Gender {
 type Comment {
   id: String!
   comment: String!
-  author: UserProfileOutput!
-  authorId: String!
+  author: UserProfileOutput
+  authorId: String
   asset: Asset!
   assetId: String!
   createdAt: DateTime!

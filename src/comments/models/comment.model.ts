@@ -10,11 +10,11 @@ export class Comment {
   @Field()
   comment: string;
 
-  @Field((type) => UserProfileOutput)
-  author: UserProfileOutput;
+  @Field((type) => UserProfileOutput, { nullable: true })
+  author?: UserProfileOutput;
 
-  @Field()
-  authorId: string;
+  @Field({ nullable: true })
+  authorId?: string;
 
   @Field((type) => Asset)
   asset: Asset;
