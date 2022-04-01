@@ -2,7 +2,12 @@
 Built with NestJS, TypeScript, PostgreSQL 
 
 
-## Description
+## Features
+- Login/Registration
+- User Wallet
+- List Assets in Marketplace
+- Purchase Assets
+
 ### ER Diagram
   ![ERD_nft](https://user-images.githubusercontent.com/76242678/155911278-3af075d0-aac7-4424-ac32-01b09c896ce7.png)
 
