@@ -34,6 +34,7 @@ $ npm run start:prod
 ```
 
 ## Test
+- Implemented unit tests with jest
 
 ```bash
 # unit tests
